@@ -73,4 +73,24 @@ router.post('/login', async (req, res) => {
     }
 })
 
+router.post('/recoverPassword', async (req, res) => {
+    try{
+        const {user_mail} = await req.body;
+        const mail = await User.findOne(
+            {
+                where: {
+                    userMail: user_mail
+                }
+            }
+        )
+        if(mail === null){
+            res.status(422).send({errors: {email: 'El correo no esta registrado'}})
+        }else{
+            res.status(200).json(mail)
+        }
+    }catch(e){
+        res.status(422).send({errors: {email: 'Datos Incorrectos'}})
+    }
+})
+
 export default router
