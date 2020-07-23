@@ -30,3 +30,10 @@
             "new_password: "a1234"}``
     - Salida: ``Status: 200 Cuando la operación fue exitosa`` ``Status: 404 Cuando algo salio mal``
     
+### Recuperar contraseña
+*WIP*
+- Ruta: ``user/recoverPassword``
+    - Entradas:  
+         ``{"user_mail": "manuelcelisforero@gmail.com"}``
+    - Salida: ``Status: 200 Cuando la operación fue exitosa`` ``Status: 404 Cuando algo salio mal``    
+    
