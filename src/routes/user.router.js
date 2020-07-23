@@ -1,11 +1,11 @@
 import {Router} from 'express';
 import User from "../../models/user";
-import { comparePassword, encryptPassword, generateToken } from '../utils/utils'
+import { comparePassword, encryptPassword, generateToken, verifyToken } from '../utils/utils'
 
 
 const router = Router();
 
-router.get('/', async (req, res) => {
+router.get('/', verifyToken, async (req, res) => {
     try {
         const users = await User.findAll();
         res.status(200).json(users)
