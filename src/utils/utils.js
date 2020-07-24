@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt-nodejs'
 import jwt from 'jsonwebtoken'
 import config from "../../config/config";
+import NodeMailer from 'nodemailer';
 
 export async function encryptPassword(password) {
     return bcrypt.hashSync(password, bcrypt.genSaltSync(10));
@@ -21,4 +22,23 @@ export function verifyToken(req, res, next) {
     const payload = jwt.verify(token, config.jwtSecret)
     req.userId = payload.id
     next()
+}
+
+export function sendEmail(mail, res){
+    var transporter = NodeMailer.createTransport({
+        service: "Gmail",
+        auth: {
+            user: "sfconstructora01@gmail.com",
+            pass: "construSF"
+        }
+    });
+    var mailOptions = {
+        from: "Remitente",
+        to: mail,
+        subject: "enviado desde nodemailer",
+        text: "Hola Mundo"
+    }
+    transporter.sendMail(mailOptions, (err, info) => {
+         res.status(200).json({message: 'Enviado'});
+    });
 }

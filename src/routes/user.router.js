@@ -1,7 +1,6 @@
 import {Router} from 'express';
 import User from "../../models/user";
-import { comparePassword, encryptPassword, generateToken, verifyToken } from '../utils/utils'
-
+import { comparePassword, encryptPassword, generateToken, verifyToken, sendEmail } from '../utils/utils'
 
 const router = Router();
 
@@ -40,7 +39,7 @@ router.post('/regUser', async (req, res) => {
     }
 })
 
-router.post('/changePass', async (req, res) => {
+router.post('/changePass', verifyToken, async (req, res) => {
     try {
         const { user_mail, current_pass, new_pass } = await req.body;
         const user = await User.update(
@@ -54,7 +53,6 @@ router.post('/changePass', async (req, res) => {
             })
         if (user[0] === 0) throw new Error();
         res.sendStatus(200)
-
     } catch (e) {
         console.log(e.message)
         res.status(422).send({errors: {email: 'Datos Incorrectos'}})
@@ -65,12 +63,24 @@ router.post('/login', async (req, res) => {
     try {
         const {user_mail, user_password} = await req.body;
         const user = await User.findOne({where: {userMail: user_mail }});
-
         if (!user && !await comparePassword(user_password, user.userPassword)) throw new Error();
         res.status(200).json({ token: await generateToken(user.id, user.userMail)})
     } catch (e) {
         res.status(422).send({errors: {email: 'Datos Incorrectos'}})
     }
-})
+});
+
+router.post('/recoverPass', async (req, res) => {
+    try{
+        const {user_mail} = await req.body;
+        const user = await User.findOne({where: {userMail: user_mail}});
+        if(user){
+            await sendEmail(user.userMail, res);
+        }
+    }catch (e){
+        console.log(e);
+        res.status(422).send({errors: {message:'Email no exite en la base de datos'}})
+    }
+});
 
 export default router
