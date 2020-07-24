@@ -33,12 +33,12 @@ export function sendEmail(mail, res){
         }
     });
     var mailOptions = {
-        from: "Remitente",
+        from: "S&F App",
         to: mail,
-        subject: "enviado desde nodemailer",
+        subject: "Recuperacion de contraseña",
         text: "Hola Mundo"
     }
     transporter.sendMail(mailOptions, (err, info) => {
-         res.status(200).json({message: 'Enviado'});
+        res.status(200).json({message: 'Enviado'});
     });
 }
