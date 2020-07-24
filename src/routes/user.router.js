@@ -78,7 +78,6 @@ router.post('/recoverPass', async (req, res) => {
             await sendEmail(user.userMail, res);
         }
     }catch (e){
-        console.log(e);
         res.status(422).send({errors: {message:'Email no exite en la base de datos'}})
     }
 });
