@@ -39,7 +39,7 @@ router.post('/regUser', async (req, res) => {
     }
 })
 
-router.post('/changePass', verifyToken, async (req, res) => {
+router.post('/changePass', async (req, res) => {
     try {
         const { user_mail, current_pass, new_pass } = await req.body;
         const user = await User.update(
@@ -75,11 +75,30 @@ router.post('/recoverPass', async (req, res) => {
         const {user_mail} = await req.body;
         const user = await User.findOne({where: {userMail: user_mail}});
         if(user){
-            await sendEmail(user.userMail, res);
+            await sendEmail(user.userMail, user.id, res);
         }
     }catch (e){
         res.status(422).send({errors: {message:'Email no exite en la base de datos'}})
     }
 });
+
+router.post('/changePassword', verifyToken, async (req, res) => {
+    const password = await encryptPassword(req.body.newPassword)
+    try {
+        const user = await User.update(
+            {
+                userPassword: password
+            },{
+                where: {
+                    userMail: req.mail
+                }
+            })
+        if (user[0] === 0) throw new Error();
+        res.sendStatus(200)
+    } catch (e) {
+        console.log(e);
+        res.status(422).send({errors: {email: 'Datos Incorrectos'}})
+    }
+})
 
 export default router
