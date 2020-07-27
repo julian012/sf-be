@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken'
 import config from "../../config/config";
+import NodeMailer from 'nodemailer';
 
 const Cryptr = require('cryptr');
 const cryptr = new Cryptr('myTotalySecretKey');
@@ -34,4 +35,23 @@ export function verifyToken(req, res, next) {
     const payload = jwt.verify(token, config.jwtSecret)
     req.userId = payload.id
     next()
+}
+
+export function sendEmail(mail, res){
+    var transporter = NodeMailer.createTransport({
+        service: "Gmail",
+        auth: {
+            user: "sfconstructora01@gmail.com",
+            pass: "construSF"
+        }
+    });
+    var mailOptions = {
+        from: "S&F App",
+        to: mail,
+        subject: "Recuperacion de contraseña",
+        text: "Hola Mundo"
+    }
+    transporter.sendMail(mailOptions, (err, info) => {
+        res.status(200).json({message: 'Enviado'});
+    });
 }
