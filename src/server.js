@@ -3,8 +3,10 @@ import morgan from 'morgan';
 import cors from 'cors';
 import connect from "./database";
 import UserRouter from "./routes/user.router";
+import OuvreRouter from "./routes/ouvre.router";
 
 import User from "../models/user";
+import Ouvre from "../models/ouvre";
 
 const app = express();
 connect().then(r => console.log('Success'));
@@ -21,5 +23,6 @@ app.get('/',async function (req, res) {
 
 // Routes
 app.use('/user', UserRouter);
+app.use('/ouvre', OuvreRouter);
 
 export default app;
