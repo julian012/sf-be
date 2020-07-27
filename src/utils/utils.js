@@ -33,11 +33,14 @@ export function verifyToken(req, res, next) {
     const token = req.headers.authorization.split(' ')[1]
     if (!token) return res.status(401).send('Unthorize Request')
     const payload = jwt.verify(token, config.jwtSecret)
-    req.userId = payload.id
+    req.userId = payload.
+    
+    req.userMail = payload.userMail
     next()
 }
 
-export function sendEmail(mail, res){
+export async function sendEmail(mail, id,res){
+    var token = await generateToken(id, mail);
     var transporter = NodeMailer.createTransport({
         service: "Gmail",
         auth: {
@@ -46,12 +49,12 @@ export function sendEmail(mail, res){
         }
     });
     var mailOptions = {
-        from: "Remitente",
+        from: "S&F App",
         to: mail,
-        subject: "enviado desde nodemailer",
-        text: "Hola Mundo"
+        subject: "Recuperacion de contraseña",
+        html: "<h1>pagina.prueba/recoverPassword/" + token + "</h1>"
     }
     transporter.sendMail(mailOptions, (err, info) => {
-         res.status(200).json({message: 'Enviado'});
+        res.status(200).json({message: 'Enviado'});
     });
 }
