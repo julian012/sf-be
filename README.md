@@ -34,10 +34,17 @@
         ``Status: 200 Cuando la operación fue exitosa`` ``Status: 404 Cuando algo salio mal``
     
 ### Recuperar contraseña
-*WIP*
-- Ruta: ``user/recoverPassword``
+- Ruta: ``user/recoverPass``
     - Entradas:  
          ``{"user_mail": "manuelcelisforero@gmail.com"}``
     - Salida:  
         ``Status: 200 Cuando la operación fue exitosa`` ``Status: 404 Cuando algo salio mal``    
+        
+### Eliminar usuario
+*Solo para pruebas*
+- Ruta: ``user/deleteUser``
+    - Entradas:  
+         ``{"user_mail": "manuelcelisforero@gmail.com"}``
+    - Salida:  
+        ``Status: 200 Cuando la operación fue exitosa`` ``Status: 404 Cuando algo salio mal``
     
