@@ -33,8 +33,7 @@ export function verifyToken(req, res, next) {
     const token = req.headers.authorization.split(' ')[1]
     if (!token) return res.status(401).send('Unthorize Request')
     const payload = jwt.verify(token, config.jwtSecret)
-    req.userId = payload.
-    
+    req.userId = payload.id
     req.userMail = payload.userMail
     next()
 }
