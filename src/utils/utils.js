@@ -1,14 +1,27 @@
-import bcrypt from 'bcrypt-nodejs'
 import jwt from 'jsonwebtoken'
 import config from "../../config/config";
 import NodeMailer from 'nodemailer';
 
+const Cryptr = require('cryptr');
+const cryptr = new Cryptr('myTotalySecretKey');
+
 export async function encryptPassword(password) {
-    return bcrypt.hashSync(password, bcrypt.genSaltSync(10));
+    //return bcrypt.hashSync(password, bcrypt.genSaltSync(10));
+    return cryptr.encrypt(password)
+}
+
+export async function decryptPassword(password) {
+    //return bcrypt.hashSync(password, bcrypt.genSaltSync(10));
+    return cryptr.decrypt(password)
 }
 
 export async function comparePassword(password, passwordSave) {
-    return bcrypt.compareSync(password, passwordSave);
+    //return bcrypt.compareSync(password, passwordSave);
+    if(password === cryptr.decrypt(passwordSave)){
+        return true
+    }else{
+        return false
+    }
 }
 
 export async function generateToken(id, userMail) {
