@@ -51,7 +51,7 @@ export async function sendEmail(mail, id,res){
         from: "S&F App",
         to: mail,
         subject: "Recuperacion de contraseña",
-        html: "<h1>pagina.prueba/recoverPassword/" + token + "</h1>"
+        html: "<h1>https://dev-sf.netlify.app/pass-reset/" + token + "</h1>"
     }
     transporter.sendMail(mailOptions, (err, info) => {
         res.status(200).json({message: 'Enviado'});
