@@ -5,9 +5,6 @@ import connect from "./database";
 import UserRouter from "./routes/user.router";
 import OuvreRouter from "./routes/ouvre.router";
 
-import User from "../models/user";
-import Ouvre from "../models/ouvre";
-
 const app = express();
 connect().then(r => console.log('Success'));
 
@@ -18,7 +15,7 @@ app.use(express.json())
 app.use(cors());
 
 app.get('/',async function (req, res) {
-    res.json(await User.findAll());
+    res.json('Hola');
 });
 
 // Routes

@@ -15,4 +15,21 @@ router.get('/', verifyToken, async (req, res) => {
     }
 })
 
+router.post('/addOuvre', verifyToken, async (req, res) => {
+    try {
+        const ouvre = await Ouvre.create({
+            ouvreName: req.body.ouvreName,
+            ouvreDirection: req.body.ouvreDirection, 
+            ouvreStartDate: req.body.ouvreStartDate,
+            ouvreEndDate: req.body.ouvreEndDate,
+            statusOuvre: req.body.statusOuvre,
+            userId: req.body.userId
+        })
+        if(!ouvre) throw new Error();
+        res.status(200).json({message: 'Creada Correctamente'});
+    }catch (e) {
+        res.status(422).json({message: 'No se pudo completar la accion'});
+    }
+});
+
 export default router
