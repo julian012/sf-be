@@ -4,6 +4,7 @@ import cors from 'cors';
 import connect from "./database";
 import UserRouter from "./routes/user.router";
 import OuvreRouter from "./routes/ouvre.router";
+import TaskRouter from "./routes/task.router";
 
 const app = express();
 connect().then(r => console.log('Success'));
@@ -21,5 +22,6 @@ app.get('/',async function (req, res) {
 // Routes
 app.use('/user', UserRouter);
 app.use('/ouvre', OuvreRouter);
+app.use('/task', TaskRouter);
 
 export default app;

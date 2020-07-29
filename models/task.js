@@ -1,27 +1,35 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
-module.exports = (sequelize, DataTypes) => {
-  class Task extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
-    static associate(models) {
-      // define association here
+import { DataTypes }  from "sequelize";
+import { sequelize } from "../src/database";
+
+const Ouvre = sequelize.define('Tasks', {
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      allowNull: false,
+      primaryKey: true
+    },
+    taskDescription: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    taskStartDate: {
+      type: DataTypes.DATE,
+      allowNull: false
+    },
+    taskEndDate: {
+      type: DataTypes.DATE,
+      allowNull: true
+    },
+    taskState: {
+      type: DataTypes.ENUM(['FINISHED', 'CANCELLED', 'DOING']),
+      allowNull: false
+    },
+    ouvreId: {
+      type: DataTypes.INTEGER,
+      allowNull: false
     }
-  };
-  Task.init({
-    ouvreId: DataTypes.INTEGER,
-    taskDescription: DataTypes.STRING,
-    taskStartDate: DataTypes.DATE,
-    taskEndDate: DataTypes.DATE,
-    taskState: DataTypes.STRING
-  }, {
-    sequelize,
-    modelName: 'Task',
-  });
-  return Task;
-};
+}, {
+  freezeTableName: true
+})
+
+export default Ouvre;  
