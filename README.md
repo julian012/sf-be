@@ -115,9 +115,13 @@
     - Salida: 
         ``Status: 200 Cuando la operacion fue exitosa mas json {'task': task}`` ``Status: 422 Cuando la operacion no se completo``
 
+## Obtener actividades de una obra
 
-
-
+    - Entradas:
+        el respectivo token
+        ``{"ouvreId": ouvreId}``
+    - Salida: 
+        ``Status: 200 Cuando la operacion fue exitosa mas json {'tasks': tasks}`` ``Status: 422 Cuando la operacion no se completo``
 
 
 

@@ -36,4 +36,15 @@ router.post('/getTask', verifyToken, async (req, res) => {
     }
 })
 
+router.post('/getActivitiesByOuvre', verifyToken, async (req, res) => {
+    try {
+        const tasks = await Task.findAll({where: {
+            ouvreId: req.body.ouvreId
+        }});
+        res.status(200).json({tasks: tasks})
+    }catch(e){
+        res.status(422).json({message: 'No se encontro la obra'});
+    }
+})
+
 export default router;
