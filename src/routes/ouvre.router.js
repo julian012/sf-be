@@ -25,4 +25,15 @@ router.post('/addOuvre', verifyToken, async (req, res) => {
     }
 });
 
-export default router
+router.post('/getOuvre', verifyToken, async (req, res) => {
+    try{
+        const ouvre = await Ouvre.findOne({where: {
+            id : req.body.id
+        }})
+        res.status(200).json({ouvre: ouvre});
+    }catch (e){
+        res.status(422).json({message: 'No se encontro la obra'});
+    }
+})
+
+export default router;
