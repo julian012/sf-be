@@ -18,17 +18,17 @@ router.get('/', verifyToken, async (req, res) => {
 router.post('/regUser', async (req, res) => {
     try {
         const {
-            doc_type, doc_number, user_rol, user_name,
-            user_phone, user_mail, user_password
+            docType, docNumber, userRol, userName,
+            userPhone, userMail, userPassword
         } = await req.body;
-        const password = await encryptPassword(user_password)
+        const password = await encryptPassword(userPassword)
         const user = await User.create({
-            docType: doc_type,
-            userNumber: doc_number,
-            userRol: user_rol,
-            userName: user_name,
-            userPhone: user_phone,
-            userMail: user_mail,
+            docType: docType,
+            userNumber: docNumber,
+            userRol: userRol,
+            userName: userName,
+            userPhone: userPhone,
+            userMail: userMail,
             userPassword: password
         })
         if(!user) throw new Error()
@@ -41,18 +41,18 @@ router.post('/regUser', async (req, res) => {
 
 router.post('/changePass', async (req, res) => {
     try {
-        const { user_mail, current_password, new_password } = await req.body;
-        const user = await User.findOne({where:{userMail: user_mail}})
+        const { userMail, currentPassword, newPassword } = await req.body;
+        const user = await User.findOne({where:{userMail: userMail}})
 
         if(user != null){
             const pass = decryptPassword(user.userPassword)
             user.update(
-                { userPassword: await encryptPassword(new_password) },
+                { userPassword: await encryptPassword(newPassword) },
                 { where: {
-                    pass: current_password
+                    pass: currentPassword
                 }}
             )
-            res.status(200).json(user_mail)
+            res.status(200).json(userMail)
         }
     } catch (e) {
         console.log(e.message)
@@ -62,9 +62,9 @@ router.post('/changePass', async (req, res) => {
 
 router.post('/login', async (req, res) => {
     try {
-        const {user_mail, user_password} = await req.body;
-        const user = await User.findOne({where: {userMail: user_mail }});
-        if (user && await comparePassword(user_password, user.userPassword)){
+        const {userMail, userPassword} = await req.body;
+        const user = await User.findOne({where: {userMail: userMail }});
+        if (user && await comparePassword(userPassword, user.userPassword)){
             res.status(200).json({ token: await generateToken(user.id, user.userMail)}) 
         }else{
             throw new Error();
@@ -76,23 +76,33 @@ router.post('/login', async (req, res) => {
 
 router.post('/recoverPass', async (req, res) => {
     try{
-        const {user_mail} = await req.body;
-        const user = await User.findOne({where: {userMail: user_mail}});
+        const {userMail} = await req.body;
+        const user = await User.findOne({where: {userMail: userMail}});
         if(user){
             await sendEmail(user.userMail, user.id, res);
         }
         res.status(200).json("Correo enviado") 
     }catch (e){
-        
         res.status(422).send({errors: {message:'Email no exite en la base de datos'}})
     }
 });
 
-router.post('/changePassword', verifyToken, async (req, res) => {
+router.post('/verifyToken', verifyToken, async (req, res) => {
+    try{
+        const user = await User.findOne({where: {
+            userMail: req.userMail
+        }})
+        res.status(200).json({nameUser: user.userName, userMail: user.userMail});
+    }catch(e){
+        res.status(422).send({errors: {email: 'Datos Incorrectos'}});
+    }
+})
+
+router.post('/changePassword', async (req, res) => {
     const password = await encryptPassword(req.body.newPassword)
     try {
         const user = await User.update({userPassword: password}, 
-                                {where:{userMail: req.userMail}}); 
+                                {where:{userMail: req.body.userMail}}); 
         res.status(200).json({message: 'Correcto'});     
     } catch (e) {
         console.log(e);
@@ -100,13 +110,12 @@ router.post('/changePassword', verifyToken, async (req, res) => {
     }
 })
 
-
 router.post('/deleteUser', async(req, res) => {
     try{
-        const {user_mail} = await req.body;
+        const {userMail} = await req.body;
         await User.destroy({
             where: {
-                userMail: user_mail
+                userMail: userMail
             }
         })
     }catch(e){
