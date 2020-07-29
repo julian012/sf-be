@@ -7,7 +7,7 @@ const router = Router();
 router.get('/', verifyToken, async (req, res) => {
     try {
         const ouvres = await Ouvre.findAll();
-        res.status(200).json(ouvres)
+        res.status(200).json({ouvres: ouvres})
     } catch (e) {
         res.status(422).json({
             message: 'error'

@@ -92,7 +92,7 @@ router.post('/verifyToken', verifyToken, async (req, res) => {
         const user = await User.findOne({where: {
             userMail: req.userMail
         }})
-        res.status(200).json({nameUser: user.userName, userMail: user.userMail});
+        res.status(200).json({userName: user.userName, userMail: user.userMail});
     }catch(e){
         res.status(422).send({errors: {email: 'Datos Incorrectos'}});
     }
@@ -105,7 +105,6 @@ router.post('/changePassword', async (req, res) => {
                                 {where:{userMail: req.body.userMail}}); 
         res.status(200).json({message: 'Correcto'});     
     } catch (e) {
-        console.log(e);
         res.status(422).send({errors: {email: 'Datos Incorrectos'}})
     }
 })
