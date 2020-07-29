@@ -123,6 +123,72 @@
     - Salida: 
         ``Status: 200 Cuando la operacion fue exitosa mas json {'tasks': tasks}`` ``Status: 422 Cuando la operacion no se completo``
 
+##############3# Asignar Trabajadores ################
+
+### Obtener todas las Actividades}
+
+- Ruta: ``assignworker/``
+    - Entradas: 
+        el token respectivo
+    - Salidas:
+         ``Status: 200 Cuando la operacion fue exitosa mas json {'assignworkers': assignworkers}`` ``Status: 422 Cuando la operacion no se completo``
+
+### Agregar asignaciones
+
+- Ruta: ``assignworker/addAssignWorker``
+    - Entradas: 
+        el token respectivo
+        {
+            "userId": "11",
+            "taskId": "7",
+            "assignStartDate": "2020-07-23",
+            "assignEndDate": "2020-07-23"
+        }
+    - Salidas:
+         ``Status: 200 Cuando la operacion fue exitosa `` ``Status: 422 Cuando la operacion no se completo``
+
+### Obtener una Asignacion
+
+- Ruta: ``assignworker/getAssignWorker``
+    - Entradas: 
+        el token respectivo
+        {
+            "id": 2
+        }
+    - Salidas:
+         ``Status: 200 Cuando la operacion fue exitosa mas un json ({assignworker: assignworker}) `` ``Status: 422 Cuando la operacion no se completo``
+
+### Obtener una Asignacion por actividades
+
+- Ruta: ``assignworker/getAssignWorkerByTask``
+    - Entradas: 
+        el token respectivo
+        {
+            "taskId": 7
+        }
+    - Salidas:
+         ``Status: 200 Cuando la operacion fue exitosa mas un json ({assignworkers: assignworkers}) `` ``Status: 422 Cuando la operacion no se completo``
+
+### Obtener una Asignacion por usuario o trabajador
+
+- Ruta: ``assignworker/getAssignWorkerByTask``
+    - Entradas: 
+        el token respectivo
+        {
+            "userId": 11
+        }
+    - Salidas:
+         ``Status: 200 Cuando la operacion fue exitosa mas un json ({assignworkers: assignworkers}) `` ``Status: 422 Cuando la operacion no se completo``
+
+
+
+
+
+
+
+
+
+
 
 
 

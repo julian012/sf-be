@@ -1,7 +1,7 @@
 import { DataTypes }  from "sequelize";
 import { sequelize } from "../src/database";
 
-const Ouvre = sequelize.define('Tasks', {
+const Task = sequelize.define('Tasks', {
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
@@ -32,4 +32,4 @@ const Ouvre = sequelize.define('Tasks', {
   freezeTableName: true
 })
 
-export default Ouvre;  
+export default Task;  

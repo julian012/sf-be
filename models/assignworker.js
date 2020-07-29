@@ -1,26 +1,31 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
-module.exports = (sequelize, DataTypes) => {
-  class AssignWorker extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
-    static associate(models) {
-      // define association here
+import { DataTypes }  from "sequelize";
+import { sequelize } from "../src/database";
+
+const AssignWorker = sequelize.define('AssignWorkers', {
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      allowNull: false,
+      primaryKey: true
+    },
+    userId: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    taskId: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    assignStartDate: {
+      type: DataTypes.DATE,
+      allowNull: false
+    },
+    assignEndDate: {
+      type: DataTypes.DATE,
+      allowNull: true
     }
-  };
-  AssignWorker.init({
-    userId: DataTypes.INTEGER,
-    taskId: DataTypes.INTEGER,
-    assignStartDate: DataTypes.DATE,
-    assignEndDate: DataTypes.DATE
-  }, {
-    sequelize,
-    modelName: 'AssignWorker',
-  });
-  return AssignWorker;
-};
+}, {
+  freezeTableName: true
+})
+
+export default AssignWorker;  
