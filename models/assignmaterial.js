@@ -1,25 +1,28 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
-module.exports = (sequelize, DataTypes) => {
-  class AssignMaterial extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
-    static associate(models) {
-      // define association here
-    }
-  };
-  AssignMaterial.init({
-    ouvreId: DataTypes.INTEGER,
-    materialId: DataTypes.INTEGER,
-    quantityUsed: DataTypes.DOUBLE
+import { DataTypes, INET }  from "sequelize";
+import { sequelize } from "../src/database";
+
+const AssignMaterial = sequelize.define('AssignMaterial', {
+      id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        allowNull: false,
+        primaryKey: true
+      },
+      ouvreId: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+      },
+      materialId: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+      },
+      quantityUsed: {
+        type: DataTypes.DOUBLE,
+        allowNull: false
+      }
   }, {
-    sequelize,
-    modelName: 'AssignMaterial',
-  });
-  return AssignMaterial;
-};
+    freezeTableName: true
+  }
+)
+
+export default AssignMaterial
