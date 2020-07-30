@@ -13,7 +13,7 @@ let rules = {
     userName: 'required|string',
     userPhone: 'required|string',
     userMail: 'email',
-    userPassword: 'required|string'
+    userPassword: 'string'
 }
 
 let errorsMessages = {
