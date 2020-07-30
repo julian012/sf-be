@@ -23,7 +23,7 @@ router.post('/addOuvre', verifyToken, async (req, res) => {
             res.status(422).send(values);
         }else{
             const ouvre = await Ouvre.create(req.body)
-            if(!ouvre) throw new Error  ();
+            if(!ouvre) throw new Error();
             res.status(200).json({ouvre: ouvre});
         }   
     }catch (e) {
