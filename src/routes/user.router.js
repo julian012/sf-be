@@ -41,7 +41,7 @@ router.post('/regUser', async (req, res) => {
         }       
     } catch (e) {
         console.log(e)
-        res.status(422).send({errors: {email: 'Ocurrio un problema con el registro'}})
+        res.status(422).send(errors)
     }
 })
 
