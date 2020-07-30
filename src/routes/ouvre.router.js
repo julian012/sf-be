@@ -23,8 +23,8 @@ router.post('/addOuvre', verifyToken, async (req, res) => {
             res.status(422).send(values);
         }else{
             const ouvre = await Ouvre.create(req.body)
-            if(!ouvre) throw new Error  ();
-            res.status(200).json({message: 'Creada Correctamente'});
+            if(!ouvre) throw new Error();
+            res.status(200).json({ouvre: ouvre});
         }   
     }catch (e) {
         console.log(e);
@@ -40,6 +40,15 @@ router.post('/getOuvre', verifyToken, async (req, res) => {
         res.status(200).json({ouvre: ouvre});
     }catch (e){
         res.status(422).json({message: 'No se encontro la obra'});
+    }
+})
+
+router.post('/assignDirector', verifyToken, async (req, res) => {
+    try{
+        const ouvre = await Ouvre.update({userId: req.body.userId}, 
+                                         {where: {id: id}})
+    }catch(e){
+        res.status(422).json({message: 'No se encuentro director'})
     }
 })
 

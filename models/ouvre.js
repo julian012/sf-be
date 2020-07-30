@@ -31,7 +31,7 @@ const Ouvre = sequelize.define('Ouvres', {
       },
       userId: {
         type: DataTypes.INTEGER,
-        allowNull: false
+        allowNull: true
       }
   }, {
     freezeTableName: true
