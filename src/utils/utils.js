@@ -16,8 +16,13 @@ let rules = {
     userPassword: 'required|string'
 }
 
+let errorsMessages = {
+    required: ':attribute: Este campo es obligatorio',
+    email: ':attribute: Email no valido'
+}
+
 export async function verifyForm(data){
-    let validation = new Validator(data, rules);
+    let validation = new Validator(data, rules, errorsMessages);
     validation.passes();
     return validation.errors;
 }
