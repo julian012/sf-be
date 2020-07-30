@@ -103,7 +103,7 @@
 - Ruta: ``ouvre/addTask``
     - Entradas:
         el token respectivo
-        ``{"taskDescription": taskDescription, "taskStartDate": taskStartDate, "taskEndDate": taskEndDate(null), "taskState": taskState, "ouvreId": ouvreId}``
+        ``{"taskName": taskName, "taskDescription": taskDescription, "taskStartDate": taskStartDate, "taskEndDate": taskEndDate(null), "taskState": taskState, "ouvreId": ouvreId}``
     - Salida: 
         ``Status: 200 Cuando la operacion fue exitosa `` ``Status: 422 Cuando la operacion no se completo``
 

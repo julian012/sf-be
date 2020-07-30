@@ -1,9 +1,26 @@
 import jwt from 'jsonwebtoken'
 import config from "../../config/config";
 import NodeMailer from 'nodemailer';
+import Validator from 'validatorjs';
 
 const Cryptr = require('cryptr');
 const cryptr = new Cryptr('myTotalySecretKey');
+
+let rules = {
+    docType: 'required|string',
+    userNumber: 'required|string',
+    userRol: 'required|string',
+    userName: 'required|string',
+    userPhone: 'required|string',
+    userMail: 'email',
+    userPassword: 'required|string'
+}
+
+export async function verifyForm(data){
+    let validation = new Validator(data, rules);
+    validation.passes();
+    return validation.errors;
+}
 
 export async function encryptPassword(password) {
     //return bcrypt.hashSync(password, bcrypt.genSaltSync(10));

@@ -1,6 +1,6 @@
 import {Router} from 'express';
 import User from "../../models/user";
-import { comparePassword, encryptPassword, decryptPassword, generateToken, verifyToken, sendEmail } from '../utils/utils'
+import { comparePassword, encryptPassword, decryptPassword, generateToken, verifyToken, sendEmail, verifyForm } from '../utils/utils'
 
 const router = Router();
 
@@ -21,6 +21,9 @@ router.post('/regUser', async (req, res) => {
             docType, docNumber, userRol, userName,
             userPhone, userMail, userPassword
         } = await req.body;
+        /*
+        var errors = await verifyForm(req.body);
+        console.log(errors.errors)*/
         const password = await encryptPassword(userPassword)
         const user = await User.create({
             docType: docType,

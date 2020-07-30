@@ -8,6 +8,10 @@ const Task = sequelize.define('Tasks', {
       allowNull: false,
       primaryKey: true
     },
+    taskName: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
     taskDescription: {
       type: DataTypes.STRING,
       allowNull: false

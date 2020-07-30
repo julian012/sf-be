@@ -33,7 +33,8 @@
     "pg-hstore": "^2.3.3",
     "sequelize": "^6.3.3",
     "sequelize-heroku": "^2.1.5",
-    "string-format": "^2.0.0"
+    "string-format": "^2.0.0",
+    "validatorjs": "^3.18.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.10.0",
