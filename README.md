@@ -90,7 +90,7 @@
         ``Status: 200 Cuando la operacion fue exitosa `` ``Status: 422 Cuando la operacion no se completo``
 
 ### Obtener una obra
-
+    -ruta: ``ouvre/getOuvre``
     - Entradas:
         el respectivo token
         ``{"id": id}``

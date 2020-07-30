@@ -1,6 +1,6 @@
 import {Router} from 'express';
 import Ouvre from "../../models/ouvre";
-import {verifyToken} from '../utils/utils'
+import {verifyToken, verifyForm} from '../utils/utils'
 
 const router = Router();
 
@@ -17,10 +17,17 @@ router.get('/', verifyToken, async (req, res) => {
 
 router.post('/addOuvre', verifyToken, async (req, res) => {
     try {
-        const ouvre = await Ouvre.create(req.body)
-        if(!ouvre) throw new Error();
-        res.status(200).json({message: 'Creada Correctamente'});
+        var errors = await verifyForm(req.body, 'ouvre');
+        var values = Object.values(errors.errors);
+        if(values.length > 0){
+            res.status(422).send(values);
+        }else{
+            const ouvre = await Ouvre.create(req.body)
+            if(!ouvre) throw new Error  ();
+            res.status(200).json({message: 'Creada Correctamente'});
+        }   
     }catch (e) {
+        console.log(e);
         res.status(422).json({message: 'No se pudo completar la accion'});
     }
 });

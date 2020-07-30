@@ -6,7 +6,7 @@ import Validator from 'validatorjs';
 const Cryptr = require('cryptr');
 const cryptr = new Cryptr('myTotalySecretKey');
 
-let rules = {
+let rulesUser = {
     docType: 'required|string',
     userNumber: 'required|string',
     userRol: 'required|string',
@@ -16,15 +16,29 @@ let rules = {
     userPassword: 'string'
 }
 
+let rulesOuvre = {
+    ouvreName: 'required|string',
+    ouvreDirection: 'required|string',
+    ouvreStartDate: 'required|date',
+    ouvreEndDate: 'date',
+    userId: 'required|integer'
+}
+
 let errorsMessages = {
     required: ':attribute: Este campo es obligatorio',
     email: ':attribute: Email no valido'
 }
 
-export async function verifyForm(data){
-    let validation = new Validator(data, rules, errorsMessages);
-    validation.passes();
-    return validation.errors;
+export async function verifyForm(data, type){
+    if(type == 'user'){
+        var validation = new Validator(data, rulesUser, errorsMessages);
+        validation.passes();
+        return validation.errors;
+    } else if(type == 'ouvre'){
+        var validation = new Validator(data, rulesOuvre, errorsMessages);
+        validation.passes();
+        return validation.errors;
+    }
 }
 
 export async function encryptPassword(password) {

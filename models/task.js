@@ -25,8 +25,9 @@ const Task = sequelize.define('Tasks', {
       allowNull: true
     },
     taskState: {
-      type: DataTypes.ENUM(['FINISHED', 'CANCELLED', 'DOING']),
-      allowNull: false
+      type: DataTypes.ENUM(['FINISHED', 'CANCELLED', 'DOING', 'PENDING']),
+      allowNull: false,
+      defaultValue: 'PENDING'
     },
     ouvreId: {
       type: DataTypes.INTEGER,

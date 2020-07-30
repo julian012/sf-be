@@ -21,7 +21,7 @@ router.post('/regUser', async (req, res) => {
             docType, userNumber, userRol, userName,
             userPhone, userMail, userPassword
         } = await req.body;
-        var errors = await verifyForm(req.body);
+        var errors = await verifyForm(req.body, 'user');
         var values = Object.values(errors.errors);
         if(values.length > 0){
             res.status(422).send(values);
@@ -49,7 +49,6 @@ router.post('/changePass', async (req, res) => {
     try {
         const { userMail, currentPassword, newPassword } = await req.body;
         const user = await User.findOne({where:{userMail: userMail}})
-
         if(user != null){
             const pass = decryptPassword(user.userPassword)
             user.update(

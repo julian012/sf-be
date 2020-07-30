@@ -25,8 +25,9 @@ const Ouvre = sequelize.define('Ouvres', {
         allowNull: true
       },
       statusOuvre: {
-          type: DataTypes.ENUM(['FINISHED', 'CANCELLED', 'DOING']),
-          allowNull: false
+          type: DataTypes.ENUM(['FINISHED', 'CANCELLED', 'DOING', 'PENDING']),
+          allowNull: false,
+          defaultValue: 'PENDING'
       },
       userId: {
         type: DataTypes.INTEGER,
