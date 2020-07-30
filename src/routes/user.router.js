@@ -128,4 +128,13 @@ router.post('/deleteUser', async(req, res) => {
     }
 })
 
+router.get('/getUserDirector', verifyToken, async(req, res) => {
+    try{
+        const users = await User.findAll({where: {userRol: 'DIRECTOR'}});
+        res.status(200).json({users: users});
+    }catch(e){
+        res.status(422).send({message: 'No se puedo completar la accion'})
+    }
+});
+
 export default router

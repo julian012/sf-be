@@ -4,6 +4,15 @@
 
 ##################### Modulo Usuarios ########################
 
+### Obtener jefe de obra
+
+- Ruta: ``user/login``----- metodo get
+    - Entradas:  
+    token respectivo
+    - Salida:  
+        ``Status: 200 Cuando se completa la accion y un json {users: users}`` ``Status: 422 Cuando no se pudo completa la accion``
+
+
 ### Registrar usuario
 - Ruta: ``user/regUser``
     - Entradas:  
