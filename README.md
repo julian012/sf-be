@@ -97,6 +97,15 @@
     - Salida: 
         ``Status: 200 Cuando la operacion fue exitosa mas json {'ouvre': ouvre}`` ``Status: 422 Cuando la operacion no se completo``
 
+## Asignar jefe de obra
+
+    -ruta: ``ouvre/assignDirector``
+    - Entradas:
+        el respectivo token
+        ``{"id": id, "userId": userId}``
+    - Salida: 
+        ``Status: 200 Cuando la operacion fue exitosa mas json {'ouvre': ouvre}`` ``Status: 422 Cuando la operacion no se completo``
+
 ##################### Modulo Actividades ########################
 
 ### Obtener todas las Actividades
@@ -125,16 +134,17 @@
         ``Status: 200 Cuando la operacion fue exitosa mas json {'task': task}`` ``Status: 422 Cuando la operacion no se completo``
 
 ## Obtener actividades de una obra
-
+    -ruta:``task/getActivitiesByOuvre``
     - Entradas:
         el respectivo token
         ``{"ouvreId": ouvreId}``
     - Salida: 
         ``Status: 200 Cuando la operacion fue exitosa mas json {'tasks': tasks}`` ``Status: 422 Cuando la operacion no se completo``
 
+
 ##############3# Asignar Trabajadores ################
 
-### Obtener todas las Actividades}
+### Obtener todas las Actividades
 
 - Ruta: ``assignworker/``
     - Entradas: 

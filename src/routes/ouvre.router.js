@@ -43,4 +43,13 @@ router.post('/getOuvre', verifyToken, async (req, res) => {
     }
 })
 
+router.post('/assignDirector', verifyToken, async (req, res) => {
+    try{
+        const ouvre = await Ouvre.update({userId: req.body.userId}, 
+                                         {where: {id: id}})
+    }catch(e){
+        res.status(422).json({message: 'No se encuentro director'})
+    }
+})
+
 export default router;
