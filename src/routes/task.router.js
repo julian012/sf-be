@@ -1,6 +1,6 @@
 import {Router} from 'express';
 import Task from "../../models/task";
-import {verifyToken} from '../utils/utils';
+import {verifyToken, verifyForm} from '../utils/utils';
 
 const router = Router();
 
@@ -17,9 +17,15 @@ router.get('/', verifyToken, async (req, res) => {
 
 router.post('/addTask', verifyToken, async (req, res) => {
     try {
-        const task = await Task.create(req.body)
-        if(!task) throw new Error();
-        res.status(200).json({id: task.id, name: task.nameTask});
+        var errors = await verifyForm(req.body, 'task');
+        var values = Object.values(errors.errors);
+        if(values.length > 0){
+            res.status(422).send(values);
+        }else{
+            const task = await Task.create(req.body)
+            if(!task) throw new Error();
+            res.status(200).json({id: task.id, name: task.taskName});
+        }
     }catch (e) {
         console.log(e.message);
         res.status(422).json({message: 'No se pudo completar la accion'});

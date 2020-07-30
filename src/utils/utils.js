@@ -47,7 +47,9 @@ export async function verifyForm(data, type){
         validation.passes();
         return validation.errors;
     } else if(type == 'task'){
-
+        var validation = new Validator(data, rulesTask, errorsMessages);
+        validation.passes();
+        return validation.errors;
     }
 }
 
