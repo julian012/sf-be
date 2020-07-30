@@ -108,7 +108,7 @@ router.post('/changePassword', async (req, res) => {
     try {
         const user = await User.update({userPassword: password}, 
                                 {where:{userMail: req.body.userMail}}); 
-        res.status(200).json({message: 'Correcto'});     
+        res.status(200).json({message: 'Contraseña actualizada correctamente'});     
     } catch (e) {
         res.status(422).send({errors: {email: 'Datos Incorrectos'}})
     }
