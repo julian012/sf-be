@@ -24,7 +24,7 @@ router.post('/addTask', verifyToken, async (req, res) => {
         }else{
             const task = await Task.create(req.body)
             if(!task) throw new Error();
-            res.status(200).json({id: task.id, name: task.taskName});
+            res.status(200).json({id: task.id, name: task.taskName, startDate: task.taskStartDate});
         }
     }catch (e) {
         console.log(e.message);
