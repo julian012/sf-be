@@ -18,24 +18,27 @@ router.get('/', verifyToken, async (req, res) => {
 router.post('/regUser', async (req, res) => {
     try {
         const {
-            docType, docNumber, userRol, userName,
+            docType, userNumber, userRol, userName,
             userPhone, userMail, userPassword
         } = await req.body;
-        /*
         var errors = await verifyForm(req.body);
-        console.log(errors.errors)*/
-        const password = await encryptPassword(userPassword)
-        const user = await User.create({
-            docType: docType,
-            userNumber: docNumber,
-            userRol: userRol,
-            userName: userName,
-            userPhone: userPhone,
-            userMail: userMail,
-            userPassword: password
-        })
-        if(!user) throw new Error()
-        res.status(200).json({message: 'Usuario Creado'})
+        var values = Object.values(errors.errors);
+        if(values.length > 0){
+            res.status(422).json({errors: values});
+        }else{
+            const password = await encryptPassword(userPassword)
+            const user = await User.create({
+                docType: docType,
+                userNumber: userNumber,
+                userRol: userRol,
+                userName: userName,
+                userPhone: userPhone,
+                userMail: userMail,
+                userPassword: password
+            })
+            if(!user) throw new Error()
+            res.status(200).json({message: 'Usuario Creado'})
+        }       
     } catch (e) {
         console.log(e)
         res.status(422).send({errors: {email: 'Ocurrio un problema con el registro'}})

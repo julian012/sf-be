@@ -21,6 +21,7 @@ router.post('/addTask', verifyToken, async (req, res) => {
         if(!task) throw new Error();
         res.status(200).json({message: 'Creada Correctamente'});
     }catch (e) {
+        console.log(e.message);
         res.status(422).json({message: 'No se pudo completar la accion'});
     }
 });
