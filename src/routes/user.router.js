@@ -24,7 +24,7 @@ router.post('/regUser', async (req, res) => {
         var errors = await verifyForm(req.body);
         var values = Object.values(errors.errors);
         if(values.length > 0){
-            res.status(422).json({errors: values});
+            res.status(422).send(values);
         }else{
             const password = await encryptPassword(userPassword)
             const user = await User.create({
