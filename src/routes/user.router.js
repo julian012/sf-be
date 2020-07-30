@@ -32,7 +32,7 @@ router.post('/regUser', async (req, res) => {
             userPassword: password
         })
         if(!user) throw new Error()
-        res.status(200).json({ token: generateToken(user.id, user.userMail)})
+        res.status(200).json({message: 'Usuario Creado'})
     } catch (e) {
         console.log(e)
         res.status(422).send({errors: {email: 'Ocurrio un problema con el registro'}})
