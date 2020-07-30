@@ -21,7 +21,15 @@ let rulesOuvre = {
     ouvreDirection: 'required|string',
     ouvreStartDate: 'required|date',
     ouvreEndDate: 'date',
-    userId: 'required|integer'
+    userId: 'integer'
+}
+
+let rulesTask = {
+    taskName: 'required|string',
+    taskDescription: 'required|string',
+    taskStartDate: 'required|date',
+    taskEndDate: 'date',
+    ouvreId: 'required|integer'
 }
 
 let errorsMessages = {
@@ -38,6 +46,8 @@ export async function verifyForm(data, type){
         var validation = new Validator(data, rulesOuvre, errorsMessages);
         validation.passes();
         return validation.errors;
+    } else if(type == 'task'){
+
     }
 }
 

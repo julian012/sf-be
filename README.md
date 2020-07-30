@@ -109,7 +109,7 @@
 
 ### Agregar Actividades
 
-- Ruta: ``ouvre/addTask``
+- Ruta: ``task/addTask``
     - Entradas:
         el token respectivo
         ``{"taskName": taskName, "taskDescription": taskDescription, "taskStartDate": taskStartDate, "taskEndDate": taskEndDate(null), "taskState": taskState, "ouvreId": ouvreId}``

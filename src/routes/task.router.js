@@ -19,7 +19,7 @@ router.post('/addTask', verifyToken, async (req, res) => {
     try {
         const task = await Task.create(req.body)
         if(!task) throw new Error();
-        res.status(200).json({message: 'Creada Correctamente'});
+        res.status(200).json({id: task.id, name: task.nameTask});
     }catch (e) {
         console.log(e.message);
         res.status(422).json({message: 'No se pudo completar la accion'});
