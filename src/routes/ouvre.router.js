@@ -24,7 +24,7 @@ router.post('/addOuvre', verifyToken, async (req, res) => {
         }else{
             const ouvre = await Ouvre.create(req.body)
             if(!ouvre) throw new Error  ();
-            res.status(200).json({message: 'Creada Correctamente'});
+            res.status(200).json({ouvre: ouvre});
         }   
     }catch (e) {
         console.log(e);
