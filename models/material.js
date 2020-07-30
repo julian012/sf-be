@@ -1,29 +1,43 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
-module.exports = (sequelize, DataTypes) => {
-  class Material extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
-    static associate(models) {
-      // define association here
-    }
-  };
-  Material.init({
-    materialName: DataTypes.STRING,
-    materialRegistryDate: DataTypes.DATE,
-    materialQuantity: DataTypes.DOUBLE,
-    materialAvaliable: DataTypes.DOUBLE,
-    materialPrice: DataTypes.DOUBLE,
-    userId: DataTypes.INTEGER,
-    typeMaterialId: DataTypes.STRING
-  }, {
-    sequelize,
-    modelName: 'Material',
-  });
-  return Material;
-};
+import { DataTypes }  from "sequelize";
+import { sequelize } from "../src/database";
+
+const Material = sequelize.define('Materials', {
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    allowNull: false,
+    primaryKey: true
+  },
+  materialName: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  materialRegistryDate: {
+    type: DataTypes.DATE,
+    allowNull: false
+  },
+  materialQuantity: {
+    type: DataTypes.DOUBLE,
+    allowNull: false
+  },
+  materialAvaliable: {
+    type: DataTypes.DOUBLE,
+    allowNull: true
+  },
+  materialPrice: {
+    type: DataTypes.DOUBLE,
+    allowNull: false
+  },
+  userId: {
+    type: DataTypes.INTEGER,
+    allowNull: false
+  },
+   typeMaterialId: {
+     type: DataTypes.INTEGER,
+     allowNull: false
+   }
+}, {
+freezeTableName: true
+})
+
+export default Material;
