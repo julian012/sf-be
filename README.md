@@ -6,7 +6,7 @@
 
 ### Obtener jefe de obra
 
-- Ruta: ``user/login``----- metodo get
+- Ruta: ``user/getUserDirector``----- metodo get
     - Entradas:  
     token respectivo
     - Salida:  
