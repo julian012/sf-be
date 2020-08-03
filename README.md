@@ -200,7 +200,26 @@
          ``Status: 200 Cuando la operacion fue exitosa mas un json ({assignworkers: assignworkers}) `` ``Status: 422 Cuando la operacion no se completo``
 
 
+################################## Tipos de materiales ################################333
 
+### Obtener los tipos de materiales
+
+-Rutal: ``typematerial/``
+    -Entradas:
+        el token respectivo
+    -Salidas:
+        ``Status: 200 cuando la operacion fue exitosa mas un json ({typeMaterials:typeMaterials})``
+        ``Status: 422 Cuando la operacion no se completo``
+
+## Agregar tipos de materiales
+    
+-Ruta: ``typematerial/addTypeMaterial``
+    - Entradas:
+        el token respectivo
+        {
+            "typeMaterialName": typeMaterialName,
+            "measurement": measurement
+        }
 
 
 

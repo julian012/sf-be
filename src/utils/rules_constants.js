@@ -26,5 +26,13 @@ export const TASK_RULES = {
 
 export const MESSAGE_ERRORS = {
     required: ':attribute: Este campo es obligatorio',
-    email: ':attribute: Email no valido'
+    email: ':attribute: Email no valido',
+    string: ':attribute: Este campo es de tipo String',
+    date: ':attribute: Este campo es de tipo date',
+    integer: ':attribute: Este campo es de tipo integer'
+}
+
+export const TYPE_MATERIAL_RULES = {
+    typeMaterialName: 'required|string',
+    measurement: 'required|string'
 }

@@ -5,7 +5,8 @@ import connect from "./database";
 import UserRouter from "./routes/user.router";
 import OuvreRouter from "./routes/ouvre.router";
 import TaskRouter from "./routes/task.router";
-import AssignWorker from "./routes/assignworker.router";
+import AssignWorkerRouter from "./routes/assignworker.router";
+import TypeMateialRouter from "./routes/typematerial.router";
 
 const app = express();
 connect().then(r => console.log('Success'));
@@ -24,6 +25,7 @@ app.get('/',async function (req, res) {
 app.use('/user', UserRouter);
 app.use('/ouvre', OuvreRouter);
 app.use('/task', TaskRouter);
-app.use('/assignworker', AssignWorker);
+app.use('/assignworker', AssignWorkerRouter);
+app.use('/typematerial', TypeMateialRouter);
 
 export default app;

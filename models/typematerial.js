@@ -1,7 +1,7 @@
 import { DataTypes }  from "sequelize";
 import { sequelize } from "../src/database";
 
-const TypeMaterial = sequelize.define('TypeMaterial', {
+const TypeMaterial = sequelize.define('TypeMaterials', {
       id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
