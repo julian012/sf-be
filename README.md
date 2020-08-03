@@ -220,11 +220,38 @@
             "typeMaterialName": typeMaterialName,
             "measurement": measurement
         }
+    -Salidas: 
+    ``Status: 200 cuando la operacion fue exitosa mas un json ({typeMaterial:typeMaterial})``
+        ``Status: 422 Cuando la operacion no se completo``
 
+################################## Materiales #######################################
 
+## Obtener Materiales
 
+-Rutal: ``material/``
+    -Entradas:
+        el token respectivo
+    -Salidas:
+        ``Status: 200 cuando la operacion fue exitosa mas un json ({materials:materials})``
+        ``Status: 422 Cuando la operacion no se completo``
 
-
+## Agregar materiales
+    
+-Ruta: ``material/addMaterial``
+    - Entradas:
+        el token respectivo
+        {
+            "materialName": "Cerca",
+             "materialRegistryDate": "2020-08-03",
+            "materialQuantity": 2,
+            "materialAvaliable": 1,
+            "materialPrice": 505,
+            "userId": 11,
+            "typeMaterialId": 1
+        }
+    - Salidas:
+    ``Status: 200 cuando la operacion fue exitosa mas un json ({material:material})``
+        ``Status: 422 Cuando la operacion no se completo``
 
 
 

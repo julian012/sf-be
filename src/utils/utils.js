@@ -21,7 +21,10 @@ export async function verifyForm(data, type){
             break 
         case 'typeMaterial':
             validator = new Validator(data, constants.TYPE_MATERIAL_RULES, constants.MESSAGE_ERRORS);
-        break;
+        break
+        case 'material':
+            validator = new Validator(data, constants.MATERIAL_RULES, constants.MESSAGE_ERRORS);
+        break
     }
     validator.passes()
     return validator.errors

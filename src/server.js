@@ -7,6 +7,7 @@ import OuvreRouter from "./routes/ouvre.router";
 import TaskRouter from "./routes/task.router";
 import AssignWorkerRouter from "./routes/assignworker.router";
 import TypeMateialRouter from "./routes/typematerial.router";
+import MaterialRouter from "./routes/material.router";
 
 const app = express();
 connect().then(r => console.log('Success'));
@@ -27,5 +28,6 @@ app.use('/ouvre', OuvreRouter);
 app.use('/task', TaskRouter);
 app.use('/assignworker', AssignWorkerRouter);
 app.use('/typematerial', TypeMateialRouter);
+app.use('/material', MaterialRouter);
 
 export default app;

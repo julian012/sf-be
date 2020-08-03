@@ -36,3 +36,13 @@ export const TYPE_MATERIAL_RULES = {
     typeMaterialName: 'required|string',
     measurement: 'required|string'
 }
+
+export const MATERIAL_RULES = {
+    materialName: 'required|string',
+    materialRegistryDate: 'required|date',
+    materialQuantity: 'required|integer',
+    materialAvaliable: 'required|integer',
+    materialPrice: 'required|integer',
+    userId: 'required|integer',
+    typeMaterialId: 'required|integer'
+}
