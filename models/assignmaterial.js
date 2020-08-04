@@ -1,7 +1,7 @@
 import { DataTypes, INET }  from "sequelize";
 import { sequelize } from "../src/database";
 
-const AssignMaterial = sequelize.define('AssignMaterial', {
+const AssignMaterial = sequelize.define('AssignMaterials', {
       id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,

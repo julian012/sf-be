@@ -254,6 +254,54 @@
         ``Status: 422 Cuando la operacion no se completo``
 
 
+############################## Asignar Materiales ####################################
+
+### Obtener todas las asignaciones de materiales
+
+--Ruta: ``assignMaterial/``
+    -Entradas: 
+        El token respectivo
+    -Salidas:
+        ``Status: 200 cuando la operacion fue exitosa mas un json ({assignmaterial:assignmaterial})``
+        ``Status: 422 Cuando la operacion no se completo``
+
+### Agregar un asignacion de material 
+
+--Ruta: ``assignMaterial/addAssignMaterial``
+    - Entradas:
+        El token respectivo
+        {
+            "ouvreId": 10,
+            "materialId": 1,
+            "quantityUsed": 2
+        }
+    - Salidas:
+        ``Status: 200 cuando la operacion fue exitosa mas un json ({assignmaterial:assignmaterial})``
+        ``Status: 422 Cuando la operacion no se completo``
+
+### Obtener asignaciones por obra
+
+-- Ruta: ``assignMaterial/getAssignByOuvre``
+
+- Entradas:
+        El token respectivo
+        {
+            "ouvreId": 10
+        }
+    - Salidas:
+        ``Status: 200 cuando la operacion fue exitosa mas un json ({assignmaterial:assignmaterial})``
+        ``Status: 422 Cuando la operacion no se completo``
+
+### Obtener asignaciones por material
+
+- Entradas:
+        El token respectivo
+        {
+            "materialId": 1
+        }
+    - Salidas:
+        ``Status: 200 cuando la operacion fue exitosa mas un json ({assignmaterial:assignmaterial})``
+        ``Status: 422 Cuando la operacion no se completo``
 
 
 

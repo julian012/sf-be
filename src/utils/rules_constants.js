@@ -46,3 +46,9 @@ export const MATERIAL_RULES = {
     userId: 'required|integer',
     typeMaterialId: 'required|integer'
 }
+
+export const ASSIGN_MATERIAL_RULES = {
+    ouvreId: 'required|integer',
+    materialId: 'required|integer',
+    quantityUsed: 'required|integer'
+}
