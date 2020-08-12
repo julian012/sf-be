@@ -9,6 +9,7 @@ export const USER_RULES = {
 }
 
 export const OUVRE_RULES = {
+    id: 'required|integer',
     ouvreName: 'required|string',
     ouvreDirection: 'required|string',
     ouvreStartDate: 'required|date',

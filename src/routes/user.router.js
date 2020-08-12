@@ -4,7 +4,7 @@ import { comparePassword, encryptPassword, decryptPassword, generateToken, verif
 
 const router = Router();
 
-router.get('/', verifyToken, async (req, res) => {
+router.get('/', async (req, res) => {
     try {
         const users = await User.findAll();
         res.status(200).json(users)

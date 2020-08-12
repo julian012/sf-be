@@ -21,6 +21,7 @@ router.post('/addAssignWorker', verifyToken, async (req, res) => {
         if(!assignworker) throw new Error();
         res.status(200).json({message: 'Creada Correctamente'});
     }catch (e) {
+        console.log(e)
         res.status(422).json({message: 'No se pudo completar la accion'});
     }
 });

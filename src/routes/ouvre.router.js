@@ -1,5 +1,8 @@
 import {Router} from 'express';
 import Ouvre from "../../models/ouvre";
+import Task from "../../models/task";
+import AssignWorker from "../../models/assignworker";
+import User from "../../models/user";
 import {verifyToken, verifyForm} from '../utils/utils'
 
 const router = Router();
@@ -12,6 +15,32 @@ router.get('/', verifyToken, async (req, res) => {
         res.status(422).json({
             message: 'error'
         })
+    }
+})
+
+router.post('/updateOuvreInfo', verifyToken, async (req, res) => {
+    try{
+        const data = req.body
+        var errors = await verifyForm(data, 'ouvre')
+        var values = Object.values(errors.errors)
+        if(values.length > 0){
+            res.status(422).send(values)
+        }else{
+            await Ouvre.update({
+                ouvreName: data.ouvreName,
+                ouvreDirection: data.ouvreDirection,
+                ouvreStartDate: data.ouvreStartDate,
+                ouvreEndDate: data.ouvreEndDate,
+                statusOuvre: data.statusOuvre,
+                userId: data.userId
+            }, {where: {
+                id: data.id
+            }})
+            res.status(200).json({ouvre: ouvre})
+        }
+    }catch (e){
+        console.log(e)
+        res.status(422).send({errors: {email: 'Datos Incorrectos'}})
     }
 })
 
@@ -31,6 +60,49 @@ router.post('/addOuvre', verifyToken, async (req, res) => {
         res.status(422).json({message: 'No se pudo completar la accion'});
     }
 });
+
+router.post('/getOuvreWorkers', verifyToken, async (req, res) => {
+    try{
+        var workers = []
+        const id = req.body.id
+        const activeTasks = await Task.findAll({
+            where: {
+                ouvreId: id,
+                taskState: ['DOING', 'PENDING']
+            }
+        })
+        var userIds = []
+        for (let i = 0; i < activeTasks.length; i++) {
+            const element = activeTasks[i].dataValues;
+            const assign = await AssignWorker.findAll({
+                where: {
+                    taskId: element.id 
+                }
+            })
+            if(assign != null && assign.length > 0){
+                assign.forEach(a => {
+                    userIds.push(a.dataValues.userId)
+                })
+            }
+        }
+        
+        
+        for (let i = 0; i < userIds.length; i++) {
+            const id = userIds[i];
+            const worker = await User.findOne({
+                where: {
+                    id: id
+                }
+            })
+            delete worker.dataValues['userPassword']
+            workers.push(worker.dataValues)
+        }
+        
+        res.status(200).json({workers: workers})
+    }catch (e){
+        res.status(422).json({message: 'No se encontro la obra'});
+    }
+})
 
 router.post('/getOuvre', verifyToken, async (req, res) => {
     try{
