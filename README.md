@@ -80,7 +80,7 @@
     - Salidas:
          ``Status: 200 Cuando la operacion fue exitosa mas json {'ouvres': ouvres}`` ``Status: 422 Cuando la operacion no se completo``
 
-### Obtener todas las obras
+### Agregar una nueva obra
 
 - Ruta: ``ouvre/addOuvre``
     - Entradas:
@@ -105,6 +105,16 @@
         ``{"id": id, "userId": userId}``
     - Salida: 
         ``Status: 200 Cuando la operacion fue exitosa mas json {'ouvre': ouvre}`` ``Status: 422 Cuando la operacion no se completo``
+        
+## Actualizar informacion de una obra
+
+    -ruta: ``ouvre/updateOuvreInfo``
+    - Entradas:
+        el respectivo token
+        ``{Todos los datos de la obra con los valores que se deseen cambiar seteados}``
+    - Salida: 
+        ``Status: 200 Cuando la operacion fue exitosa mas json {'ouvre': ouvre}`` ``Status: 422 Cuando la operacion no se completo``
+
 
 ##################### Modulo Actividades ########################
 
