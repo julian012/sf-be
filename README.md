@@ -114,6 +114,15 @@
         ``{Todos los datos de la obra con los valores que se deseen cambiar seteados}``
     - Salida: 
         ``Status: 200 Cuando la operacion fue exitosa mas json {'ouvre': ouvre}`` ``Status: 422 Cuando la operacion no se completo``
+        
+## Obtener los trabajadores de una obra
+
+    -ruta: ``ouvre/getOuvreWorkers``
+    - Entradas:
+        el respectivo token
+        ``{id: id de la obra}``
+    - Salida: 
+        ``Status: 200 Cuando la operacion fue exitosa mas json {'workers': workers}`` ``Status: 422 Cuando la operacion no se completo``
 
 
 ##################### Modulo Actividades ########################
