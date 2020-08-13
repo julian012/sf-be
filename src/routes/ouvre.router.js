@@ -4,6 +4,7 @@ import Task from "../../models/task";
 import AssignWorker from "../../models/assignworker";
 import AssignMaterial from "../../models/assignmaterial";
 import Material from "../../models/material"
+import TypeMaterial from "../../models/typematerial"
 import User from "../../models/user";
 import {verifyToken, verifyForm} from '../utils/utils'
 
@@ -122,7 +123,21 @@ router.post('/getOuvreMaterials', verifyToken, async (req, res) => {
                     id: element.materialId
                 }
             })
-            materials.push(material)
+
+            delete material.dataValues['createdAt']
+            delete material.dataValues['updatedAt']
+            delete material.dataValues['materialRegistryDate']
+
+            const typeMaterial = await TypeMaterial.findOne({
+                where: {
+                    id: material.dataValues.typeMaterialId
+                }
+            })
+            
+            material.dataValues.typeMaterialName = typeMaterial.dataValues.typeMaterialName
+            material.dataValues.measurement = typeMaterial.dataValues.measurement
+
+            materials.push(material.dataValues)
         }
         res.status(200).json({materials: materials})
     }catch (e){
