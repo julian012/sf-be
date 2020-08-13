@@ -28,7 +28,7 @@ router.post('/addAssignMaterial', verifyToken, async (req, res) => {
             res.status(200).json({assignmaterial: assignmaterial});
         }
     }catch (e) {
-        console.log(e.message)
+        console.log(e)
         res.status(422).json({message: 'No se pudo completar la accion'});
     }
 });

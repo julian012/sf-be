@@ -2,6 +2,8 @@ import {Router} from 'express';
 import Ouvre from "../../models/ouvre";
 import Task from "../../models/task";
 import AssignWorker from "../../models/assignworker";
+import AssignMaterial from "../../models/assignmaterial";
+import Material from "../../models/material"
 import User from "../../models/user";
 import {verifyToken, verifyForm} from '../utils/utils'
 
@@ -84,8 +86,7 @@ router.post('/getOuvreWorkers', verifyToken, async (req, res) => {
                     userIds.push(a.dataValues.userId)
                 })
             }
-        }
-        
+        } 
         
         for (let i = 0; i < userIds.length; i++) {
             const id = userIds[i];
@@ -101,6 +102,32 @@ router.post('/getOuvreWorkers', verifyToken, async (req, res) => {
         res.status(200).json({workers: workers})
     }catch (e){
         res.status(422).json({message: 'No se encontro la obra'});
+    }
+})
+
+router.post('/getOuvreMaterials', verifyToken, async (req, res) => {
+    try{
+        var materials = []
+        const id = req.body.id
+        const assignedMaterials = await AssignMaterial.findAll({
+            where: {
+                ouvreId: id
+            }
+        })
+        for (let i = 0; i < assignedMaterials.length; i++) {
+            const element = assignedMaterials[i].dataValues;
+            console.log(element)
+            const material = await Material.findOne({
+                where: {
+                    id: element.materialId
+                }
+            })
+            materials.push(material)
+        }
+        res.status(200).json({materials: materials})
+    }catch (e){
+        console.log(e)
+        res.status(422).json({message: 'No se encontro la obra'})
     }
 })
 
