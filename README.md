@@ -115,15 +115,6 @@
     - Salida: 
         ``Status: 200 Cuando la operacion fue exitosa mas json {'ouvre': ouvre}`` ``Status: 422 Cuando la operacion no se completo``
         
-## Obtener los trabajadores de una obra
-
-    -ruta: ``ouvre/getOuvreWorkers``
-    - Entradas:
-        el respectivo token
-        ``{id: id de la obra}``
-    - Salida: 
-        ``Status: 200 Cuando la operacion fue exitosa mas json {'workers': workers}`` ``Status: 422 Cuando la operacion no se completo``
-
 
 ##################### Modulo Actividades ########################
 
@@ -161,7 +152,7 @@
         ``Status: 200 Cuando la operacion fue exitosa mas json {'tasks': tasks}`` ``Status: 422 Cuando la operacion no se completo``
 
 
-##############3# Asignar Trabajadores ################
+############### Asignar Trabajadores ################
 
 ### Obtener todas las Actividades
 
@@ -217,6 +208,15 @@
         }
     - Salidas:
          ``Status: 200 Cuando la operacion fue exitosa mas un json ({assignworkers: assignworkers}) `` ``Status: 422 Cuando la operacion no se completo``
+         
+## Obtener los trabajadores de una obra
+
+    -ruta: ``ouvre/getOuvreWorkers``
+    - Entradas:
+        el respectivo token
+        ``{id: id de la obra}``
+    - Salida: 
+        ``Status: 200 Cuando la operacion fue exitosa mas json {'workers': workers}`` ``Status: 422 Cuando la operacion no se completo``
 
 
 ################################## Tipos de materiales ################################333
@@ -243,6 +243,16 @@
     ``Status: 200 cuando la operacion fue exitosa mas un json ({typeMaterial:typeMaterial})``
         ``Status: 422 Cuando la operacion no se completo``
 
+## Obtener los materiales asignados a una obra
+
+    -ruta: ``ouvre/getOuvreMaterials``
+    - Entradas:
+        el respectivo token
+        ``{id: id de la obra}``
+    - Salida: 
+        ``Status: 200 Cuando la operacion fue exitosa mas json {'materials': materials}`` ``Status: 422 Cuando la operacion no se completo``
+        
+        
 ################################## Materiales #######################################
 
 ## Obtener Materiales
