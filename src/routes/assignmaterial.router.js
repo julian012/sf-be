@@ -54,6 +54,26 @@ router.post('/getAssignByMaterial', verifyToken, async (req, res) => {
      } catch(e){
         res.status(422).json({message: 'No se pudo completar la accion'});
     }
-});
+})
+
+router.delete('/deleteAssignMaterial', verifyToken, async (req, res) => {
+    try{
+        const result = await AssignMaterial.destroy({
+            where: {
+                id: req.query.assingMaterialId
+            }
+        })
+        switch(result){
+            case 0:
+                res.status(422).json({message: 'La asignacion ingresada no existe'});
+            break;
+            case 1:
+                res.status(200).json({message: 'Asignacion eliminada correctamente'});
+            break;
+        }
+    }catch(e){
+        res.status(422).json({message: 'No se pudo completar la accion'});
+    }
+})
 
 export default router;
