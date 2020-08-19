@@ -228,8 +228,20 @@ router.get('/getOuvre', verifyToken, async (req, res) => {
         const ouvre = await Ouvre.findOne({where: {
             id : req.query.id
         }})
+        if(ouvre.userId != null){
+            const user = await User.findOne({
+                where: {
+                    id: ouvre.userId
+                }
+            })
+            ouvre.dataValues.userName = user.userName
+            ouvre.dataValues.userPhone = user.userPhone
+            ouvre.dataValues.userMail = user.userMail
+            ouvre.dataValues.userRol = user.userRol
+        }
         res.status(200).json({ouvre: ouvre});
     }catch (e){
+        console.log(e)
         res.status(422).json({message: 'No se encontro la obra'});
     }
 })
