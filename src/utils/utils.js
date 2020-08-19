@@ -50,7 +50,7 @@ export async function comparePassword(password, passwordSave) {
 }
 
 export async function generateToken(id, userMail) {
-    return jwt.sign({ id, userMail }, config.jwtSecret, { expiresIn: 86400 } )
+    return jwt.sign({ id, userMail }, config.jwtSecret, { expiresIn: 7844000000 } )
 }
 
 export function verifyToken(req, res, next) {
