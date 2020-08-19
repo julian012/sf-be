@@ -159,10 +159,17 @@ router.get('/getOuvre', verifyToken, async (req, res) => {
 
 router.post('/assignDirector', verifyToken, async (req, res) => {
     try{
-        const ouvre = await Ouvre.update({userId: req.body.userId}, 
-                                         {where: {id: id}})
+        const ouvre = await Ouvre.update(
+            {userId: req.body.userId}, 
+            {where: 
+                {id: req.body.id},
+                returning: true,
+                plain: true
+            })
+        if(ouvre.length > 0) res.status(200).json({ouvre: 'Director asignado'});
     }catch(e){
-        res.status(422).json({message: 'No se encuentro director'})
+        console.log(e)
+        res.status(422).json({message: 'Datos incorrectos'})
     }
 })
 
