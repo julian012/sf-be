@@ -267,9 +267,7 @@ router.get('/getFreeDirectors', verifyToken, async (req, res) => {
         }
         for (let i = 0; i < users.length; i++) {
             const element = users[i].dataValues;
-            freeDirectors.push({
-                user: element
-            })
+            freeDirectors.push(element)
         }
         res.status(200).json(freeDirectors);
     }catch(e){
