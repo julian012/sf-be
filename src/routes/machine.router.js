@@ -6,10 +6,10 @@ const router = Router();
 
 router.get('/getAllMachines', verifyToken, async(req, res) => {
     try{
-        const machines = Machine.findAll()
+        const machines = await Machine.findAll()
         res.status(200).json({machines: machines})
     }catch(e){
-        res.status(422).json({message: 'Datos incorrectos'})
+        res.status(422).json({message: 'Ocurrio un error'})
     }
 })
 
@@ -25,7 +25,7 @@ router.post('/addMachine', verifyToken, async(req, res) => {
             res.status(200).json({material: material});
         }   
     }catch(e){
-
+        res.status(422).json({message: 'Datos incorrectos'})
     }
 })
 
