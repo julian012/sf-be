@@ -128,14 +128,6 @@ router.post('/deleteUser', async(req, res) => {
     }
 })
 
-router.get('/getFreeDirectors', verifyToken, async (req, res) => {
-    try{
-
-    }catch(e){
-        
-    }
-})
-
 router.get('/getUserDirector', verifyToken, async(req, res) => {
     try{
         const users = await User.findAll({where: {userRol: 'DIRECTOR'}});

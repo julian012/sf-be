@@ -8,6 +8,9 @@ import TypeMaterial from "../../models/typematerial"
 import User from "../../models/user";
 import {verifyToken, verifyForm} from '../utils/utils'
 
+const {Sequelize} = require('sequelize');
+const Op = Sequelize.Op
+
 const router = Router();
 
 router.get('/', verifyToken, async (req, res) => {
@@ -170,6 +173,22 @@ router.post('/assignDirector', verifyToken, async (req, res) => {
     }catch(e){
         console.log(e)
         res.status(422).json({message: 'Datos incorrectos'})
+    }
+})
+
+router.get('/getFreeDirectors', verifyToken, async (req, res) => {
+    try{
+        const activeDirectors = await Ouvre.findAll({
+            where: {
+                userId: {
+                    [Op.ne]: null
+                }
+            },
+            attributes: ['userId']
+        })
+        console.log(activeDirectors)
+    }catch(e){
+        console.log(e)
     }
 })
 
