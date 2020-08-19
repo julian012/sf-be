@@ -76,7 +76,7 @@ router.post('/getOuvreWorkers', verifyToken, async (req, res) => {
         })
         var userIds = []
         for (let i = 0; i < activeTasks.length; i++) {
-            const element = activeTasks[i].dataValues;
+            const element = activeTasks[i];
             const assign = await AssignWorker.findAll({
                 where: {
                     taskId: element.id 
@@ -84,7 +84,7 @@ router.post('/getOuvreWorkers', verifyToken, async (req, res) => {
             })
             if(assign != null && assign.length > 0){
                 assign.forEach(a => {
-                    userIds.push(a.dataValues.userId)
+                    userIds.push(a.userId)
                 })
             }
         } 
@@ -96,8 +96,8 @@ router.post('/getOuvreWorkers', verifyToken, async (req, res) => {
                     id: id
                 }
             })
-            delete worker.dataValues['userPassword']
-            workers.push(worker.dataValues)
+            delete worker['userPassword']
+            workers.push(worker)
         }
         
         res.status(200).json({workers: workers})
@@ -116,7 +116,7 @@ router.post('/getOuvreMaterials', verifyToken, async (req, res) => {
             }
         })
         for (let i = 0; i < assignedMaterials.length; i++) {
-            const element = assignedMaterials[i].dataValues;
+            const element = assignedMaterials[i];
             console.log(element)
             const material = await Material.findOne({
                 where: {
@@ -124,20 +124,20 @@ router.post('/getOuvreMaterials', verifyToken, async (req, res) => {
                 }
             })
 
-            delete material.dataValues['createdAt']
-            delete material.dataValues['updatedAt']
-            delete material.dataValues['materialRegistryDate']
+            delete material['createdAt']
+            delete material['updatedAt']
+            delete material['materialRegistryDate']
 
             const typeMaterial = await TypeMaterial.findOne({
                 where: {
-                    id: material.dataValues.typeMaterialId
+                    id: material.typeMaterialId
                 }
             })
             
-            material.dataValues.typeMaterialName = typeMaterial.dataValues.typeMaterialName
-            material.dataValues.measurement = typeMaterial.dataValues.measurement
+            material.typeMaterialName = typeMaterial.typeMaterialName
+            material.measurement = typeMaterial.measurement
 
-            materials.push(material.dataValues)
+            materials.push(material)
         }
         res.status(200).json({materials: materials})
     }catch (e){

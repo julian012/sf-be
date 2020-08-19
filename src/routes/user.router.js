@@ -1,5 +1,6 @@
 import {Router} from 'express';
 import User from "../../models/user";
+import Ouvre from "../../models/ouvre";
 import { comparePassword, encryptPassword, decryptPassword, generateToken, verifyToken, sendEmail, verifyForm } from '../utils/utils'
 
 const router = Router();
@@ -124,6 +125,14 @@ router.post('/deleteUser', async(req, res) => {
         })
     }catch(e){
         res.status(422).send({errors: {email: 'Usuario no encontrado'}})
+    }
+})
+
+router.get('/getFreeDirectors', verifyToken, async (req, res) => {
+    try{
+
+    }catch(e){
+        
     }
 })
 
