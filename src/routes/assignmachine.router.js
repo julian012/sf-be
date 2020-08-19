@@ -33,4 +33,24 @@ router.post('/addAssignMachine', verifyToken, async (req, res) => {
     }
 });
 
+router.delete('/deleteAssignMachine', verifyToken, async (req, res) => {
+    try{
+        const test = await AssignMachine.destroy({
+            where: {
+                id: req.query.assingMachineId
+            }
+        })
+        switch(test){
+            case 0:
+                res.status(422).json({message: 'La asignacion ingresada no existe'});
+            break;
+            case 1:
+                res.status(200).json({message: 'Asignacion eliminada correctamente'});
+            break;
+        }
+    }catch(e){
+        res.status(422).json({message: 'No se pudo completar la accion'});
+    }
+})
+
 export default router

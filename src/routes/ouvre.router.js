@@ -170,20 +170,25 @@ router.post('/getOuvreMachines', verifyToken, async(req, res) => {
                 }
             })
             if(assign != null && assign.length > 0){
+                console.log(element)
                 assign.forEach(a => {
-                    machineIds.push(a.machineId)
+                    machineIds.push({
+                        id: a.machineId,
+                        assingMachineId: a.id
+                    })
                 })
             }
         }
         for (let i = 0; i < machineIds.length; i++) {
-            const id = machineIds[i];
+            const element = machineIds[i];
             var machineT = await Machine.findOne({
                 where: {
-                    id: id
+                    id: element.id
                 }
             })
 
             var machine = machineT.dataValues
+            machine.assingMachineId = element.assingMachineId
 
             delete machine['createdAt']
             delete machine['updatedAt']
