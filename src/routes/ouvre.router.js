@@ -6,10 +6,7 @@ import AssignMaterial from "../../models/assignmaterial";
 import Material from "../../models/material"
 import TypeMaterial from "../../models/typematerial"
 import User from "../../models/user";
-import {verifyToken, verifyForm} from '../utils/utils'
-
-const {Sequelize} = require('sequelize');
-const Op = Sequelize.Op
+import {verifyToken, verifyForm, Op} from '../utils/utils'
 
 const router = Router();
 
@@ -178,6 +175,7 @@ router.post('/assignDirector', verifyToken, async (req, res) => {
 
 router.get('/getFreeDirectors', verifyToken, async (req, res) => {
     try{
+        const freeDirectors = []
         const activeDirectors = await Ouvre.findAll({
             where: {
                 userId: {
@@ -186,7 +184,18 @@ router.get('/getFreeDirectors', verifyToken, async (req, res) => {
             },
             attributes: ['userId']
         })
-        console.log(activeDirectors)
+        var users = await User.findAll()
+        for (let i = 0; i < activeDirectors.length; i++) {
+            const element = activeDirectors[i].dataValues.userId;
+            users = users.filter( u => u.dataValues.id !== element)
+        }
+        for (let i = 0; i < users.length; i++) {
+            const element = users[i].dataValues;
+            freeDirectors.push({
+                user: element
+            })
+        }
+        res.status(200).json(freeDirectors);
     }catch(e){
         console.log(e)
     }

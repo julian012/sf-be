@@ -7,6 +7,9 @@ import * as constants from './rules_constants'
 const Cryptr = require('cryptr');
 const cryptr = new Cryptr('myTotalySecretKey');
 
+const {Sequelize} = require('sequelize');
+export const Op = Sequelize.Op
+
 export async function verifyForm(data, type){
     var validator 
     switch(type){
