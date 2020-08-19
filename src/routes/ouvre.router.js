@@ -3,9 +3,12 @@ import Ouvre from "../../models/ouvre";
 import Task from "../../models/task";
 import AssignWorker from "../../models/assignworker";
 import AssignMaterial from "../../models/assignmaterial";
+import AssignMachine from "../../models/assignmachines";
 import Material from "../../models/material"
 import TypeMaterial from "../../models/typematerial"
+import TypeMachine from "../../models/typemachines"
 import User from "../../models/user";
+import Machine from "../../models/machine"
 import {verifyToken, verifyForm, Op} from '../utils/utils'
 
 const router = Router();
@@ -141,6 +144,73 @@ router.post('/getOuvreMaterials', verifyToken, async (req, res) => {
         }
         res.status(200).json({materials: materials})
     }catch (e){
+        console.log(e)
+        res.status(422).json({message: 'No se encontro la obra'})
+    }
+})
+
+router.post('/getOuvreMachines', verifyToken, async(req, res) => {
+    try{
+        var machines = []
+        const id = req.body.id
+        const activeTasks = await Task.findAll({
+            where: {
+                ouvreId: id,
+                taskState: ['DOING', 'PENDING']
+            }
+        })
+        var machineIds = []
+        for (let i = 0; i < activeTasks.length; i++) {
+            const element = activeTasks[i];
+            const assign = await AssignMachine.findAll({
+                where: {
+                    taskId: element.id 
+                }
+            })
+            if(assign != null && assign.length > 0){
+                assign.forEach(a => {
+                    machineIds.push(a.machineId)
+                })
+            }
+        }
+        for (let i = 0; i < machineIds.length; i++) {
+            const id = machineIds[i];
+            var machineT = await Machine.findOne({
+                where: {
+                    id: id
+                }
+            })
+
+            var machine = machineT.dataValues
+
+            delete machine['createdAt']
+            delete machine['updatedAt']
+
+            
+
+            const typeMachine = await TypeMachine.findOne({
+                where: {
+                    id: machine.typeMachineId
+                }
+            })
+
+            machine.nameTypeMachine = typeMachine.nameTypeMachine
+            machine.machineHourValue = typeMachine.machineHourValue
+
+            const user = await User.findOne({
+                where: {
+                    id: machine.userId
+                }
+            })
+
+            machine.userName = user.userName
+            machine.userPhone = user.userPhone
+
+            machines.push(machine)
+        }
+        res.status(200).json({machines: machines})
+        
+    }catch(e){
         console.log(e)
         res.status(422).json({message: 'No se encontro la obra'})
     }
