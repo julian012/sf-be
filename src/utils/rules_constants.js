@@ -37,6 +37,17 @@ export const TYPE_MATERIAL_RULES = {
     measurement: 'required|string'
 }
 
+export const TYPE_MACHINE_RULES = {
+    nameTypeMachine: 'required|string',
+    machineHourValue: 'required|integer'
+}
+
+export const MACHINE_RULES = {
+    machinePlate: 'required|string',
+    typeMachineId: 'required|integer',
+    userId: 'required|integer'
+}
+
 export const MATERIAL_RULES = {
     materialName: 'required|string',
     materialRegistryDate: 'required|date',

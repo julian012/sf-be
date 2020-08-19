@@ -27,16 +27,28 @@ router.post('/regUser', async (req, res) => {
         if(values.length > 0){
             res.status(422).send(values);
         }else{
-            const password = await encryptPassword(userPassword)
-            const user = await User.create({
-                docType: docType,
-                userNumber: userNumber,
-                userRol: userRol,
-                userName: userName,
-                userPhone: userPhone,
-                userMail: userMail,
-                userPassword: password
-            })
+            var user = null
+            if(userPassword){
+                const password = await encryptPassword(userPassword)
+                user = await User.create({
+                    docType: docType,
+                    userNumber: userNumber,
+                    userRol: userRol,
+                    userName: userName,
+                    userPhone: userPhone,
+                    userMail: userMail,
+                    userPassword: password
+                })
+            }else{
+                user = await User.create({
+                    docType: docType,
+                    userNumber: userNumber,
+                    userRol: userRol,
+                    userName: userName,
+                    userPhone: userPhone
+                })
+            }
+            
             if(!user) throw new Error()
             res.status(200).json({message: 'Usuario Creado'})
         }       

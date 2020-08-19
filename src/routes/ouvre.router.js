@@ -201,7 +201,7 @@ router.get('/getFreeDirectors', verifyToken, async (req, res) => {
         }
         res.status(200).json(freeDirectors);
     }catch(e){
-        console.log(e)
+        res.status(422).json({message: 'Datos incorrectos'})
     }
 })
 
