@@ -89,11 +89,11 @@
     - Salida: 
         ``Status: 200 Cuando la operacion fue exitosa `` ``Status: 422 Cuando la operacion no se completo``
 
-### Obtener una obra
-    -ruta: ``ouvre/getOuvre``
+### Obtener una obra GET
+    -ruta: ``ouvre/getOuvre?id=13``
     - Entradas:
         el respectivo token
-        ``{"id": id}``
+        ``ouvre/getOuvre?id=13``
     - Salida: 
         ``Status: 200 Cuando la operacion fue exitosa mas json {'ouvre': ouvre}`` ``Status: 422 Cuando la operacion no se completo``
 
