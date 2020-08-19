@@ -102,17 +102,39 @@ router.post('/getOuvreWorkers', verifyToken, async (req, res) => {
                     id: element.userId
                 }
             })
-
+            if (verifyId(workers, userIds[i].userId)) {
+                for(let j = 0; j < workers.length; j++){
+                    if(workers[j].id == userIds[i].userId){
+                        workers[j].dataValues.tasks.push(element.assignWorkerId);
+                    }
+                }
+            }else{
+                var tasks = [];
+                tasks.push(element.assignWorkerId);
+                worker.dataValues.tasks = tasks;
+                delete worker.dataValues['userPassword'];
+                workers.push(worker);
+            }
+            /*
             worker.dataValues.assignWorkerId = element.assignWorkerId
             delete worker.dataValues['userPassword']
-            workers.push(worker)
+            workers.push(worker)*/
         }
-        
         res.status(200).json({workers: workers})
     }catch (e){
         res.status(422).json({message: 'No se encontro la obra'});
     }
 })
+
+function verifyId(workers, id){
+    for(let i = 0; i < workers.length; i++){
+        if(workers[i].dataValues.id = id){
+            return true;
+        }else {
+            return false;
+        }
+    }
+}
 
 router.post('/getOuvreMaterials', verifyToken, async (req, res) => {
     try{
