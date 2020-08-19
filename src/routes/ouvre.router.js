@@ -146,10 +146,10 @@ router.post('/getOuvreMaterials', verifyToken, async (req, res) => {
     }
 })
 
-router.post('/getOuvre', verifyToken, async (req, res) => {
+router.get('/getOuvre', verifyToken, async (req, res) => {
     try{
         const ouvre = await Ouvre.findOne({where: {
-            id : req.body.id
+            id : req.query.id
         }})
         res.status(200).json({ouvre: ouvre});
     }catch (e){

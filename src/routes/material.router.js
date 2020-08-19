@@ -15,6 +15,18 @@ router.get('/', verifyToken, async (req, res) => {
     }
 })
 
+router.get('/getMaterials', verifyToken, async (req, res) => {
+    try{
+        const materials = await Material.findAll()
+        if(materials.length > 0){
+            res.status(200).send({materials: materials})
+        }
+    }catch(e){
+        console.log(e);
+        res.status(422).json({message: 'No se pudo completar la accion'});
+    }
+})
+
 router.post('/addMaterial', verifyToken, async (req, res) => {
     try {
         var errors = await verifyForm(req.body, 'material');
