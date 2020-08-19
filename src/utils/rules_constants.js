@@ -63,3 +63,12 @@ export const ASSIGN_MATERIAL_RULES = {
     materialId: 'required|integer',
     quantityUsed: 'required|integer'
 }
+
+export const ASSIGN_MACHINE_RULES = {
+    machineId: 'required|integer',
+    taskId: 'required|integer',
+    assignStartDate: 'required|date',
+    assignEndDate: 'required|date',
+    standbyPrice: 'required|integer',
+    workerdHours: 'required|integer'
+}
