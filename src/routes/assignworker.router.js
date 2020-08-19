@@ -59,4 +59,24 @@ router.post('/getAssignWorkerByUser', verifyToken, async (req, res) => {
     }
 })
 
+router.delete('/deleteAssignWorker', verifyToken, async (req, res) => {
+    try{
+        const result = await AssignWorker.destroy({
+            where: {
+                id: req.query.assingWorkerId
+            }
+        })
+        switch(result){
+            case 0:
+                res.status(422).json({message: 'La asignacion ingresada no existe'});
+            break;
+            case 1:
+                res.status(200).json({message: 'Asignacion eliminada correctamente'});
+            break;
+        }
+    }catch(e){
+        res.status(422).json({message: 'No se pudo completar la accion'});
+    }
+})
+
 export default router;

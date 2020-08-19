@@ -87,19 +87,24 @@ router.post('/getOuvreWorkers', verifyToken, async (req, res) => {
             })
             if(assign != null && assign.length > 0){
                 assign.forEach(a => {
-                    userIds.push(a.userId)
+                    userIds.push({
+                        userId: a.userId,
+                        assignWorkerId: a.id
+                    })
                 })
             }
         } 
         
         for (let i = 0; i < userIds.length; i++) {
-            const id = userIds[i];
+            const element = userIds[i];
             const worker = await User.findOne({
                 where: {
-                    id: id
+                    id: element.userId
                 }
             })
-            delete worker['userPassword']
+
+            worker.dataValues.assignWorkerId = element.assignWorkerId
+            delete worker.dataValues['userPassword']
             workers.push(worker)
         }
         
