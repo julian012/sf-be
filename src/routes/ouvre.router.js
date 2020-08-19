@@ -121,11 +121,13 @@ router.post('/getOuvreMaterials', verifyToken, async (req, res) => {
         for (let i = 0; i < assignedMaterials.length; i++) {
             const element = assignedMaterials[i];
             console.log(element)
-            const material = await Material.findOne({
+            const materialT = await Material.findOne({
                 where: {
                     id: element.materialId
                 }
             })
+            
+            var material = materialT.dataValues
 
             delete material['createdAt']
             delete material['updatedAt']
