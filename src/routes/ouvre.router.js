@@ -184,7 +184,11 @@ router.get('/getFreeDirectors', verifyToken, async (req, res) => {
             },
             attributes: ['userId']
         })
-        var users = await User.findAll()
+        var users = await User.findAll({
+            where: {
+                userRol: 'DIRECTOR'
+            }
+        })
         for (let i = 0; i < activeDirectors.length; i++) {
             const element = activeDirectors[i].dataValues.userId;
             users = users.filter( u => u.dataValues.id !== element)
