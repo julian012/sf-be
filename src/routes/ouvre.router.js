@@ -167,6 +167,9 @@ router.post('/getOuvreMaterials', verifyToken, async (req, res) => {
             
             material.typeMaterialName = typeMaterial.typeMaterialName
             material.measurement = typeMaterial.measurement
+            console.log(assignedMaterials[i].id);
+            material.idAssignMaterial = assignedMaterials[i].id;
+            material.quantity = assignedMaterials[i].quantityUsed
 
             materials.push(material)
         }
