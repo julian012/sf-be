@@ -54,4 +54,30 @@ router.get('/getActivitiesByOuvre', verifyToken, async (req, res) => {
     }
 })
 
+router.post('/updateTasks', verifyToken, async (req, res) => {
+    try{
+        const data = req.body
+        var errors = await verifyForm(data, 'task')
+        var values = Object.values(errors.errors)
+        if(values.length > 0){
+            res.status(422).json({"error": values});
+        }else{
+            var task = await Task.update({
+                taskName: data.taskName,
+                taskDescription: data.taskDescription,
+                taskStartDate: data.taskStartDate,
+                taskEndDate: data.taskEndDate,
+                taskState: data.taskState,
+                ouvreId: data.ouvreId
+            }, {where: {
+                id: data.id
+            }})
+            console.log(task)
+            res.status(200).json({id: data.id})
+        }
+    }catch(e){
+        res.status(422).json({"error": e})
+    }
+})
+
 export default router;
