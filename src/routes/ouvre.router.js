@@ -203,7 +203,9 @@ router.post('/getOuvreMachines', verifyToken, async(req, res) => {
                 assign.forEach(a => {
                     machineIds.push({
                         id: a.machineId,
-                        assingMachineId: a.id
+                        assingMachineId: a.id,
+                        assingStartDate: a.assignStartDate,
+                        assignEndDate: a.assignEndDate
                     })
                 })
             }
@@ -232,6 +234,8 @@ router.post('/getOuvreMachines', verifyToken, async(req, res) => {
 
             machine.nameTypeMachine = typeMachine.nameTypeMachine
             machine.machineHourValue = typeMachine.machineHourValue
+            machine.assingStartDate = machineIds[i].assingStartDate
+            machine.assignEndDate = machineIds[i].assignEndDate
 
             const user = await User.findOne({
                 where: {
