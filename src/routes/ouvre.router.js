@@ -30,9 +30,9 @@ router.post('/updateOuvreInfo', verifyToken, async (req, res) => {
         var errors = await verifyForm(data, 'ouvre')
         var values = Object.values(errors.errors)
         if(values.length > 0){
-            res.status(422).send(values)
+            res.status(422).json({"error": values});
         }else{
-            await Ouvre.update({
+            const ouvre = await Ouvre.update({
                 ouvreName: data.ouvreName,
                 ouvreDirection: data.ouvreDirection,
                 ouvreStartDate: data.ouvreStartDate,
@@ -42,11 +42,10 @@ router.post('/updateOuvreInfo', verifyToken, async (req, res) => {
             }, {where: {
                 id: data.id
             }})
-            res.status(200).json({ouvre: ouvre})
+            res.status(200).json({"success": "Modificación realizada"})
         }
     }catch (e){
-        console.log(e)
-        res.status(422).send('Ocurrio un problema')
+        res.status(422).json({"error": e})
     }
 })
 
@@ -168,6 +167,9 @@ router.post('/getOuvreMaterials', verifyToken, async (req, res) => {
             
             material.typeMaterialName = typeMaterial.typeMaterialName
             material.measurement = typeMaterial.measurement
+            console.log(assignedMaterials[i].id);
+            material.idAssignMaterial = assignedMaterials[i].id;
+            material.quantity = assignedMaterials[i].quantityUsed
 
             materials.push(material)
         }
