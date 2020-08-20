@@ -42,7 +42,7 @@ router.post('/updateOuvreInfo', verifyToken, async (req, res) => {
             }, {where: {
                 id: data.id
             }})
-            res.status(200).json({message: 'Actualizado correctamente'})
+            res.status(200).json({message: 'success'})
         }
     }catch (e){
         console.log(e)
