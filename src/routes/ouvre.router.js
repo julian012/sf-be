@@ -32,7 +32,7 @@ router.post('/updateOuvreInfo', verifyToken, async (req, res) => {
         if(values.length > 0){
             res.status(422).send(values)
         }else{
-            await Ouvre.update({
+            const ouvre = await Ouvre.update({
                 ouvreName: data.ouvreName,
                 ouvreDirection: data.ouvreDirection,
                 ouvreStartDate: data.ouvreStartDate,
@@ -42,7 +42,7 @@ router.post('/updateOuvreInfo', verifyToken, async (req, res) => {
             }, {where: {
                 id: data.id
             }})
-            res.status(200).json({ouvre: ouvre})
+            res.status(200).json({message: 'Actualizado correctamente'})
         }
     }catch (e){
         console.log(e)
