@@ -63,7 +63,7 @@ router.post('/regUser', async (req, res) => {
             }
             
             if(!user) throw new Error()
-            res.status(200).json({message: 'Usuario Creado'})
+            res.status(200).json(user)
         }       
     } catch (e) {
         console.log(e)
