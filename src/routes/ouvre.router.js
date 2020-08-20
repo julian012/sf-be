@@ -46,7 +46,7 @@ router.post('/updateOuvreInfo', verifyToken, async (req, res) => {
         }
     }catch (e){
         console.log(e)
-        res.status(422).send('Ocurrio un problema')
+        res.status(422).send('Ocurrio un problema: ', e.message)
     }
 })
 
