@@ -16,6 +16,19 @@ router.get('/', async (req, res) => {
     }
 })
 
+router.get('/getWorkers', verifyToken, async(req, res) => {
+    try{
+        const workers = await User.findAll({
+            where: {
+                userRol: 'WORKER'
+            }
+        })
+        res.status(200).send(workers)
+    }catch(e){
+        res.status(422).send({message: 'Ocurrio un error'})
+    }
+})
+
 router.post('/regUser', async (req, res) => {
     try {
         const {
