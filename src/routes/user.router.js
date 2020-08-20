@@ -63,7 +63,12 @@ router.post('/regUser', async (req, res) => {
             }
             
             if(!user) throw new Error()
-            res.status(200).json({message: 'Usuario Creado'})
+
+            delete user.dataValues["userPassword"]
+            delete user.dataValues["createdAt"]
+            delete user.dataValues["updatedAt"]
+
+            res.status(200).json(user)
         }       
     } catch (e) {
         console.log(e)
