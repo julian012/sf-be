@@ -30,7 +30,7 @@ router.post('/updateOuvreInfo', verifyToken, async (req, res) => {
         var errors = await verifyForm(data, 'ouvre')
         var values = Object.values(errors.errors)
         if(values.length > 0){
-            res.status(422).send(values)
+            res.status(422).json({"error": values});
         }else{
             const ouvre = await Ouvre.update({
                 ouvreName: data.ouvreName,
@@ -45,7 +45,7 @@ router.post('/updateOuvreInfo', verifyToken, async (req, res) => {
             res.status(200).json({"success": "Modificación realizada"})
         }
     }catch (e){
-        res.status(422).json({error: e})
+        res.status(422).json({"error": e})
     }
 })
 
