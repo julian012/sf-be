@@ -101,9 +101,9 @@ router.post('/getOuvreWorkers', verifyToken, async (req, res) => {
                     id: element.userId
                 }
             })
-            if (verifyId(workers, userIds[i].userId)) {
+            if (verifyId(workers, element.userId)) {
                 for(let j = 0; j < workers.length; j++){
-                    if(workers[j].id == userIds[i].userId){
+                    if(workers[j].id == element.userId){
                         workers[j].dataValues.tasks.push(element.assignWorkerId);
                     }
                 }
@@ -127,7 +127,7 @@ router.post('/getOuvreWorkers', verifyToken, async (req, res) => {
 
 function verifyId(workers, id){
     for(let i = 0; i < workers.length; i++){
-        if(workers[i].dataValues.id = id){
+        if(workers[i].dataValues.id == id){
             return true;
         }else {
             return false;
