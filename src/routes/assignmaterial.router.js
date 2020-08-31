@@ -1,6 +1,7 @@
 import {Router} from 'express';
 import AssignMaterial from "../../models/assignmaterial";
 import {verifyToken, verifyForm} from '../utils/utils';
+import Material from "../../models/material";
 
 const router = Router();
 
@@ -95,6 +96,30 @@ router.post('/giveBackMaterial', verifyToken, async (req, res) => {
         }
     }catch(e){
         res.status(422).json({error: 'No se pudo completar la accion'});
+    }
+})
+
+router.post('/getMaterialWithAssign', verifyToken, async (req, res)=>{
+    try{
+        var assignsInfo = [];
+        const material = await Material.findAll({where: {
+            id: req.body.id
+        }});
+        const assignMaterial = await AssignMaterial.findAll({where: {
+            materialId: material[0].id
+        }});
+        for(var i = 0; i < assignMaterial.length; i++){
+            var data = {};
+            data.id = assignMaterial[i].id;
+            data.ouvreId = assignMaterial[i].ouvreId,
+            data.quantityUsed = assignMaterial[i].quantityUsed
+            assignsInfo.push(data);
+        }
+        material[0].dataValues.Assigns = assignsInfo;
+        res.status(200).json({'material': material})
+    }catch(e){
+        console.log(e.message)
+        res.status(422).json({message: 'No se pudo completar la accion'})
     }
 })
 
