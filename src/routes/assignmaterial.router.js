@@ -76,4 +76,26 @@ router.delete('/deleteAssignMaterial', verifyToken, async (req, res) => {
     }
 })
 
+router.post('/giveBackMaterial', verifyToken, async (req, res) => {
+    try{
+        const assignMaterial = await AssignMaterial.findAll({where: {
+            id: req.body.idAssignMaterial
+        }});
+        var quantityFinal = assignMaterial[0].quantityUsed;
+        if(quantityFinal >= req.body.quantity){
+            var q = quantityFinal - req.body.quantity;
+            await AssignMaterial.update({
+                quantityUsed: q
+            }, {where: {
+                id: req.body.idAssignMaterial
+            }})
+            res.status(200).json({'success': 'Cambio realizado'})
+        }{
+            res.status(422).json({'error': 'Cantidad no valida'})
+        }
+    }catch(e){
+        res.status(422).json({error: 'No se pudo completar la accion'});
+    }
+})
+
 export default router;
