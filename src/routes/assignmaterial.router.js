@@ -82,7 +82,7 @@ router.post('/giveBackMaterial', verifyToken, async (req, res) => {
             id: req.body.idAssignMaterial
         }});
         var quantityFinal = assignMaterial[0].quantityUsed;
-        if(quantityFinal >= req.body.quantity){
+        if(quantityFinal > req.body.quantity){
             var q = quantityFinal - req.body.quantity;
             await AssignMaterial.update({
                 quantityUsed: q
