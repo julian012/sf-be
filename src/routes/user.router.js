@@ -167,4 +167,13 @@ router.get('/getUserDirector', verifyToken, async(req, res) => {
     }
 });
 
+router.get('/getProviderList', verifyToken, async(req, res) => {
+    try{
+        const providers = await User.findAll({where: {userRol: 'PROVIDER'}});
+        res.status(200).json({providers: providers})
+    }catch(e){
+        res.status(422).json({message: 'No se pudo completar la accion'})
+    }
+})
+
 export default router
