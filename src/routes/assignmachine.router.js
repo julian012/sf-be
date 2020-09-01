@@ -1,5 +1,8 @@
 import {Router} from 'express';
 import AssignMachine from "../../models/assignmachines";
+import Machine from "../../models/machine";
+import Task from "../../models/task";
+import Ouvre from "../../models/ouvre";
 import {verifyToken, verifyForm} from '../utils/utils';
 
 const router = Router();
@@ -50,6 +53,38 @@ router.delete('/deleteAssignMachine', verifyToken, async (req, res) => {
         }
     }catch(e){
         res.status(422).json({message: 'No se pudo completar la accion'});
+    }
+})
+
+router.post('/getTaskByMachine', verifyToken, async (req, res) => {
+    try{
+        var ts = [];
+        const machine = await Machine.findOne({where: {
+            id: req.body.id
+        }})
+        const assigns = await AssignMachine.findAll({where: {
+            machineId: machine.id
+        }})
+        for(var i = 0; i < assigns.length; i++){
+            var info = {};
+            const tasks = await Task.findAll({where: {
+                id: assigns[i].taskId
+            }})
+            for(var j = 0; j < tasks.length; j++){
+                const ouvre = await Ouvre.findOne({where: {
+                    id: tasks[j].ouvreId
+                }})
+            info.taskName = tasks[j].taskName;
+            info.taskDate = tasks[j].taskStartDate;
+            info.ouvreName = ouvre.ouvreName;
+            ts.push(info);
+            }
+        }
+        machine.dataValues.Tasks = ts;
+        res.status(200).json({machine: machine})
+    }catch(e){
+        console.log(e)
+        res.status(422).json({error: 'No se pudo completar la accion'});
     }
 })
 
