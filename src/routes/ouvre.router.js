@@ -10,6 +10,7 @@ import TypeMachine from "../../models/typemachines"
 import User from "../../models/user";
 import Machine from "../../models/machine"
 import {verifyToken, verifyForm, Op} from '../utils/utils'
+import { verify } from 'jsonwebtoken';
 
 const router = Router();
 
@@ -68,71 +69,53 @@ router.post('/addOuvre', verifyToken, async (req, res) => {
 
 router.post('/getOuvreWorkers', verifyToken, async (req, res) => {
     try{
-        var workers = []
-        const id = req.body.id
-        const activeTasks = await Task.findAll({
-            where: {
-                ouvreId: id,
-                taskState: ['DOING', 'PENDING']
-            }
-        })
-        var userIds = []
-        for (let i = 0; i < activeTasks.length; i++) {
-            const element = activeTasks[i];
-            const assign = await AssignWorker.findAll({
-                where: {
-                    taskId: element.id 
-                }
-            })
-            if(assign != null && assign.length > 0){
-                assign.forEach(a => {
-                    userIds.push({
-                        userId: a.userId,
-                        assignWorkerId: a.id
-                    })
-                })
-            }
-        } 
-        
-        for (let i = 0; i < userIds.length; i++) {
-            const element = userIds[i];
-            const worker = await User.findOne({
-                where: {
-                    id: element.userId
-                }
-            })
-            if (verifyId(workers, element.userId)) {
-                for(let j = 0; j < workers.length; j++){
-                    if(workers[j].id == element.userId){
-                        workers[j].dataValues.tasks.push(element.assignWorkerId);
+        var workers = [];
+        const ouvre = await Ouvre.findOne({where:{
+            id: req.body.id
+        }})
+        const tasks = await Task.findAll({where: {
+           ouvreId: ouvre.id 
+        }})
+        for(var i = 0; i < tasks.length; i++){
+            var ts = [];
+            const assigns = await AssignWorker.findAll({where:{
+                taskId: tasks[i].id
+            }})
+            for(var j = 0; j < assigns.length; j++){
+                const worker = await User.findOne({where: {
+                    id: assigns[j].userId
+                }})
+                if(verifyId(workers, worker.id)){
+                    for(var k = 0; k < workers.length; k++){
+                        if(worker.id === workers[k].id){
+                            var ts = workers[k].dataValues.tasks;
+                            ts.push(tasks[i].id);
+                            workers[k].dataValues.tasks = ts;
+                        }
                     }
+                }else {
+                    var ts = [];
+                    ts.push(tasks[i].id);
+                    worker.dataValues.tasks = ts;
+                    delete worker.dataValues['userPassword'];
+                    workers.push(worker);
                 }
-            }else{
-                var tasks = [];
-                tasks.push(element.assignWorkerId);
-                worker.dataValues.tasks = tasks;
-                delete worker.dataValues['userPassword'];
-                workers.push(worker);
             }
-            /*
-            worker.dataValues.assignWorkerId = element.assignWorkerId
-            delete worker.dataValues['userPassword']
-            workers.push(worker)*/
         }
-        res.status(200).json({workers: workers})
+        res.status(200).json({workers: workers});
     }catch (e){
-        res.status(422).json({message: 'No se encontro la obra'});
+        res.status(422).json({message: 'No se pudo completar la operacion'});
     }
 })
 
 function verifyId(workers, id){
-    for(let i = 0; i < workers.length; i++){
-        if(workers[i].dataValues.id == id){
+    for(var p = 0; p < workers.length; p++){
+        if (workers[p].dataValues.id === id){
+                
             return true;
-        }else {
-            return false;
         }
     }
+    return false;
 }
 
 router.post('/getOuvreMaterials', verifyToken, async (req, res) => {
