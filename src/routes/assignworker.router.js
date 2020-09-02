@@ -79,4 +79,25 @@ router.delete('/deleteAssignWorker', verifyToken, async (req, res) => {
     }
 })
 
+router.delete('/deleteWorkerOfTask', verifyToken, async (req, res) => {
+    try{
+        const result = await AssignWorker.destroy({
+            where: {
+                userId: req.query.userId,
+                taskId: req.query.taskId
+            }
+        })
+        switch(result){
+            case 0:
+                res.status(422).json({message: 'No existe esa asignacion'});
+            break;
+            case 1:
+                res.status(200).json({message: 'Eliminacion completa'});
+            break;
+        }
+    }catch(e){
+        res.status(422).json({message: 'No se pudo completar la accion'});
+    }
+})
+
 export default router;
