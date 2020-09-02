@@ -23,6 +23,11 @@ const AssignWorker = sequelize.define('AssignWorkers', {
     assignEndDate: {
       type: DataTypes.DATE,
       allowNull: true
+    },
+    stateAssign: {
+      type: DataTypes.ENUM(['DOING', 'TRANSFER']),
+      allowNull: true,
+      defaultValue: 'DOING'
     }
 }, {
   freezeTableName: true

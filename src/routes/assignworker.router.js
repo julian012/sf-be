@@ -100,4 +100,24 @@ router.delete('/deleteWorkerOfTask', verifyToken, async (req, res) => {
     }
 })
 
+router.post('/transferWorker', verifyToken, async (req, res) => {
+    try{
+        const assign = await AssignWorker.findOne({where: {
+            id: req.body.id
+        }})
+        delete assign.dataValues['id'];
+        assign.dataValues.taskId = req.body.taskId;
+        const assignworker = await AssignWorker.create(assign.dataValues)
+        if(!assignworker) throw new Error();
+        const updateAssign = await AssignWorker.update({stateAssign: 'TRANSFER'}, {where:{
+            id: req.body.id
+        }})
+        if(!updateAssign) throw new Error();
+        res.status(200).json({message: 'Transferencia Correcta'});
+    }catch(e){
+        console.log(e);
+        res.status(422).json({message: 'No se pudo completar la accion'})
+    }
+})
+
 export default router;
