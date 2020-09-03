@@ -1,7 +1,7 @@
 import {Router} from 'express'
 import Ouvre from "../../models/ouvre";
 import Schedule from "../../models/schedule"
-import {verifyToken, verifyForm, Op, generateRandonId} from '../utils/utils'
+import {verifyToken, verifyForm, Op, generateRandonId, getActualDate} from '../utils/utils'
 
 const router = Router()
 
@@ -48,6 +48,7 @@ router.post('/addSchedule', verifyToken, async(req, res) => {
             )
             s.ouvreId = ouvre.dataValues.id
             s.id = generateRandonId()
+            s.scheduleDate = getActualDate()
             const schedule = await Schedule.create(s)
             if(!schedule) throw new Error()
             res.status(200).json(schedule)

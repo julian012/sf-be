@@ -98,6 +98,17 @@ export async function sendEmail(mail, id,res){
     });
 }
 
+export function getActualDate(){
+    var currentdate = new Date(); 
+    var datetime = currentdate.getFullYear() + "-"
+                + (currentdate.getMonth()+1)  + "-" 
+                + currentdate.getDate() + " "  
+                + currentdate.getHours() + ":"  
+                + currentdate.getMinutes() + ":" 
+                + currentdate.getSeconds() + "+00";
+    return datetime
+}
+
 export function generateRandonId(){
     return Math.floor(Math.random() * (+2000 - +1)) + +1; 
 }

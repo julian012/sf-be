@@ -75,6 +75,5 @@ export const ASSIGN_MACHINE_RULES = {
 
 export const SCHEDULE_RULES = {
     ouvreToken: 'required|string',
-    userId: 'required|integer',
-    scheduleDate: 'required|date'
+    userId: 'required|integer'
 }
