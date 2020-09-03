@@ -15,6 +15,34 @@ router.get('/', async (req, res) => {
     }
 })
 
+router.post('/updateUser', verifyToken, async(req, res) => {
+    try{
+        const newUser = req.body
+        const user = await User.update({
+            docType: newUser.docType,
+            userNumber: newUser.userNumber,
+            userRol: newUser.userRol,
+            userName: newUser.userName,
+            userPhone: newUser.userPhone,
+            userMail: newUser.userMail
+        }, {where: {
+            id: newUser.userId
+        }})
+
+        if(user[0] === 1){
+            res.status(200).json({"success": "Modificación realizada"})
+        }else{
+            res.status(422).json({
+                message: 'error'
+            })
+        }
+    }catch(e){
+        res.status(422).json({
+            message: 'error'
+        })
+    }
+})
+
 router.get('/getWorkers', verifyToken, async(req, res) => {
     try{
         const workers = await User.findAll({
@@ -100,7 +128,11 @@ router.post('/login', async (req, res) => {
         const {userMail, userPassword} = await req.body;
         const user = await User.findOne({where: {userMail: userMail }});
         if (user && await comparePassword(userPassword, user.userPassword)){
-            res.status(200).json({ token: await generateToken(user.id, user.userMail)}) 
+            res.status(200).json(
+                { 
+                    userId: user.id,
+                    token: await generateToken(user.id, user.userMail)
+                }) 
         }else{
             throw new Error();
         }
