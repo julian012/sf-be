@@ -1,6 +1,5 @@
 import {Router} from 'express';
 import User from "../../models/user";
-import Ouvre from "../../models/ouvre";
 import { comparePassword, encryptPassword, decryptPassword, generateToken, verifyToken, sendEmail, verifyForm } from '../utils/utils'
 
 const router = Router();

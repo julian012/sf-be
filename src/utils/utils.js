@@ -24,22 +24,25 @@ export async function verifyForm(data, type){
             break 
         case 'typeMaterial':
             validator = new Validator(data, constants.TYPE_MATERIAL_RULES, constants.MESSAGE_ERRORS);
-        break
+            break
         case 'typeMachine':
             validator = new Validator(data, constants.TYPE_MACHINE_RULES, constants.MESSAGE_ERRORS);
-        break
+            break
         case 'material':
             validator = new Validator(data, constants.MATERIAL_RULES, constants.MESSAGE_ERRORS);
-        break
+            break
         case 'machine':
             validator = new Validator(data, constants.MACHINE_RULES, constants.MESSAGE_ERRORS);
-        break
+            break
         case 'assignMaterial':
             validator = new Validator(data, constants.ASSIGN_MATERIAL_RULES, constants.MESSAGE_ERRORS);
-        break
+            break
         case 'assignMachine':
             validator = new Validator(data, constants.ASSIGN_MACHINE_RULES, constants.MESSAGE_ERRORS);
-        break
+            break
+        case 'schedule':
+            validator = new Validator(data, constants.SCHEDULE_RULES, constants.MESSAGE_ERRORS)
+            break
     }
     validator.passes()
     return validator.errors
@@ -93,6 +96,10 @@ export async function sendEmail(mail, id,res){
     transporter.sendMail(mailOptions, (err, info) => {
         res.status(200).json({message: 'Enviado'});
     });
+}
+
+export function generateRandonId(){
+    return Math.floor(Math.random() * (+2000 - +1)) + +1; 
 }
 
 export function generateRandomToken(){

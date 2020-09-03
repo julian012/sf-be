@@ -72,3 +72,9 @@ export const ASSIGN_MACHINE_RULES = {
     standbyPrice: 'required|integer',
     workerdHours: 'required|integer'
 }
+
+export const SCHEDULE_RULES = {
+    ouvreToken: 'required|string',
+    userId: 'required|integer',
+    scheduleDate: 'required|date'
+}

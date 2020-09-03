@@ -12,6 +12,7 @@ import MaterialRouter from "./routes/material.router";
 import MachineRouter from "./routes/machine.router";
 import AssignMaterialRouter from "./routes/assignmaterial.router";
 import AssignMachineRouter from "./routes/assignmachine.router";
+import Schedule from "./routes/schedule.router"
 
 const app = express();
 connect().then(r => console.log('Success'));
@@ -37,5 +38,6 @@ app.use('/material', MaterialRouter);
 app.use('/machine', MachineRouter);
 app.use('/assignMaterial', AssignMaterialRouter);
 app.use('/assignMachine', AssignMachineRouter);
+app.use('/schedule', Schedule)
 
 export default app;
