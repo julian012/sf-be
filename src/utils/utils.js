@@ -94,3 +94,7 @@ export async function sendEmail(mail, id,res){
         res.status(200).json({message: 'Enviado'});
     });
 }
+
+export function generateRandomToken(){
+    return Math.random().toString(36).substr(2);
+}

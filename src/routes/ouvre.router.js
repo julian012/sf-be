@@ -9,7 +9,7 @@ import TypeMaterial from "../../models/typematerial"
 import TypeMachine from "../../models/typemachines"
 import User from "../../models/user";
 import Machine from "../../models/machine"
-import {verifyToken, verifyForm, Op} from '../utils/utils'
+import {verifyToken, verifyForm, generateRandomToken, Op} from '../utils/utils'
 import { verify } from 'jsonwebtoken';
 
 const router = Router();
@@ -57,6 +57,7 @@ router.post('/addOuvre', verifyToken, async (req, res) => {
         if(values.length > 0){
             res.status(422).send(values);
         }else{
+            req.body.ouvreToken = generateRandomToken()
             const ouvre = await Ouvre.create(req.body)
             if(!ouvre) throw new Error();
             res.status(200).json({ouvre: ouvre});

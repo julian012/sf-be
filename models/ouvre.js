@@ -8,6 +8,10 @@ const Ouvre = sequelize.define('Ouvres', {
         allowNull: false,
         primaryKey: true
       },
+      ouvreToken: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
       ouvreName: {
         type: DataTypes.STRING,
         allowNull: false
