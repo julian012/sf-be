@@ -68,6 +68,26 @@ router.post('/addOuvre', verifyToken, async (req, res) => {
     }
 });
 
+router.get('/getWorkerActivities', verifyToken, async (req, res) => {
+    try{
+        var tasks = []
+        const assigns = await AssignWorker.findAll({where:{
+            userId: req.query.userId
+        }})
+        for (let i = 0; i < assigns.length; i++) {
+            const element = assigns[i].dataValues;
+            console.log(element)
+            const task = await Task.findOne({where:{
+                id: element.taskId
+            }})
+            tasks.push(task)
+        }
+        res.status(200).json(tasks);
+    }catch(e){
+        res.status(422).json({message: 'No se pudo completar la operacion'});
+    }
+})
+
 router.post('/getOuvreWorkers', verifyToken, async (req, res) => {
     try{
         var workers = [];
