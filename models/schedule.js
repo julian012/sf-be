@@ -19,6 +19,10 @@ const Schedule = sequelize.define('Schedules', {
         scheduleDate: {
             type: DataTypes.DATE,
             allowNull: false
+        },
+        dayTime: {
+            type: DataTypes.STRING,
+            allowNull: false
         }
     },{
     freezeTableName: true

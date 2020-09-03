@@ -26,6 +26,7 @@ router.get('/getUserSchedule', verifyToken, async(req, res) => {
         })
         res.status(200).json(schedules)
     }catch(e){
+        console.log(e)
         res.status(422).json({
             message: 'error'
         })
