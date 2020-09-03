@@ -17,6 +17,21 @@ router.get('/', verifyToken, async (req, res) => {
     }
 })
 
+router.get('/getUserSchedule', verifyToken, async(req, res) => {
+    try{
+        const schedules = await Schedule.findAll({
+            where:{
+                userId: req.query.userId
+            }
+        })
+        res.status(200).json(schedules)
+    }catch(e){
+        res.status(422).json({
+            message: 'error'
+        })
+    }
+})
+
 router.post('/addSchedule', verifyToken, async(req, res) => {
     try{
         var errors = await verifyForm(req.body, 'schedule')
@@ -33,7 +48,6 @@ router.post('/addSchedule', verifyToken, async(req, res) => {
             )
             s.ouvreId = ouvre.dataValues.id
             s.id = generateRandonId()
-            console.log(s)
             const schedule = await Schedule.create(s)
             if(!schedule) throw new Error()
             res.status(200).json(schedule)
