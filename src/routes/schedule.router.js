@@ -1,7 +1,7 @@
 import {Router} from 'express'
 import Ouvre from "../../models/ouvre";
 import Schedule from "../../models/schedule"
-import {verifyToken, verifyForm, Op, generateRandonId, getActualDate} from '../utils/utils'
+import {verifyToken, verifyForm, Op, generateRandonId, getActualDateWithTime, getActualDate} from '../utils/utils'
 
 const router = Router()
 
@@ -48,10 +48,56 @@ router.post('/addSchedule', verifyToken, async(req, res) => {
             )
             s.ouvreId = ouvre.dataValues.id
             s.id = generateRandonId()
-            s.scheduleDate = getActualDate()
-            const schedule = await Schedule.create(s)
-            if(!schedule) throw new Error()
-            res.status(200).json(schedule)
+            s.scheduleDate = getActualDateWithTime()
+
+            const userSchedule = await Schedule.findAll({
+                where:{
+                    ouvreId: s.ouvreId,
+                    userId: s.userId
+                }
+            })
+
+            var j = 0
+            
+            for (let i = 0; i < userSchedule.length; i++) {
+                const element = userSchedule[i].dataValues;
+                if(element.scheduleDate.toISOString().split('T')[0] === getActualDate()){
+                    j++
+                }                
+            }
+
+            console.log(j)
+
+            switch(j){
+                case 0:
+                    s.dayTime = 'MORNING'
+                    break
+                case 1:
+                    s.dayTime = 'HALF_DAY'
+                    break;
+                case 2:
+                    s.dayTime = 'AFTERNOON'
+                    break;    
+                case 3:
+                    s.dayTime = 'NIGHT'
+                    break;    
+                default:
+                    s.dayTime = 'COMPLETE_JOURNEY'
+                    break;    
+            }
+
+            if(s.dayTime != 'COMPLETE_JOURNEY'){
+                const schedule = await Schedule.create(s)
+                if(!schedule) throw new Error()
+                schedule.dataValues.dayTime = s.dayTime
+                schedule.dataValues.ouvreId = ouvre.id
+                schedule.dataValues.ouvreName = ouvre.ouvreName
+                res.status(200).json(schedule)
+            }else{
+                res.status(422).json({
+                    message: 'Registros del dia completos'
+                })
+            }
         }
     }catch(e){
         console.log(e)

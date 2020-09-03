@@ -18,7 +18,11 @@ const Schedule = sequelize.define('Schedules', {
         },
         scheduleDate: {
             type: DataTypes.DATE,
-            allowNull: false
+            allowNull: false,
+            get() {
+                const date = this.getDataValue('scheduleDate')
+                return date.toISOString().split('T')[0]
+            }
         }
     },{
     freezeTableName: true
