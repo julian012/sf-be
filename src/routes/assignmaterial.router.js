@@ -137,11 +137,15 @@ router.post('/getMaterialPercentageByOuvre', verifyToken, async(req, res) => {
                 ids.push(materials[i].materialId);
             }
         }
-        for(var j = 0; j < materials.length; j ++){
-            var total = 0;
-            for(var i = 0; i < ids.length; i++){
-
+        for(var i = 0; i < ids.length; i++){
+            var totalParcial = 0;
+            for(var j = 0; j < materials.length; j++){
+                if(materials[j].materialId === ids[i]){
+                    totalParcial += materials[j].quantityUsed;
+                }
             }
+            var percentaje = (totalParcial * 100) / total; 
+            results.push({id: ids[i], percentaje: percentaje});
         }
         res.status(200).json({result: results});
     }catch(e){
