@@ -72,7 +72,7 @@ router.post('/getPercentageOuvre', verifyToken, async (req, res) => {
     }
 })
 
-router.post('/getPercentageAllOuvre', verifyToken, async(req, res) => {
+router.get('/getPercentageAllOuvre', verifyToken, async(req, res) => {
     try{
         const tasks = await Task.findAll();
         const ouvres = [];
