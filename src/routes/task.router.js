@@ -54,46 +54,6 @@ router.get('/getActivitiesByOuvre', verifyToken, async (req, res) => {
     }
 })
 
-router.get('/getPercentageAllOuvre', verifyToken, async(req, res) => {
-    try{
-        const tasks = await Task.findAll();
-        const ouvres = [];
-        for(var i = 0; i < tasks.length; i++){
-            if(!(verifyArray(ouvres, tasks[i].ouvreId))){
-                ouvres.push(tasks[i].ouvreId);
-            }
-        }
-        const result = [];
-        for(var i = 0; i < ouvres.length; i++){
-            var complete = 0;
-            var tasksNumber = 0;
-            for(var j = 0; j < tasks.length; j++){
-                if(tasks[j].ouvreId == ouvres[i]){
-                    tasksNumber++;
-                    if(tasks[j].taskState === 'FINISHED'){
-                        complete++;
-                    }
-                }    
-            }
-            var per = (complete * 100) / tasksNumber;
-            result.push({id: ouvres[i], percentage: per})
-        }
-        res.status(200).json({result: result});
-    }catch(e){
-        console.log(e);
-        res.status(422).json({"error": e});
-    }
-})
-
-function verifyArray(array, id){
-    for(var i = 0; i < array.length; i++){
-        if(array[i] === id){
-            return true;
-        }
-    }
-    return false;
-}
-
 router.post('/updateTasks', verifyToken, async (req, res) => {
     try{
         const data = req.body
