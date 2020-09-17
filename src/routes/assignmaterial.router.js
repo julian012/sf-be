@@ -2,6 +2,7 @@ import {Router} from 'express';
 import AssignMaterial from "../../models/assignmaterial";
 import {verifyToken, verifyForm} from '../utils/utils';
 import Material from "../../models/material";
+import { verify } from 'jsonwebtoken';
 
 const router = Router();
 
@@ -118,9 +119,33 @@ router.post('/getMaterialWithAssign', verifyToken, async (req, res)=>{
         material[0].dataValues.Assigns = assignsInfo;
         res.status(200).json({'material': material})
     }catch(e){
-        console.log(e.message)
         res.status(422).json({message: 'No se pudo completar la accion'})
     }
 })
+
+router.post('/getMaterialPercentageByOuvre', verifyToken, async(req, res) => {
+    try{
+        var ids = [];
+        const materials = await AssignMaterial.findAll({where: {
+            ouvreId: req.body.id
+        }});
+        for(var i = 0; i < materials.length; i++){
+            if(!(verifyArray(ids, materials[i].materialId))){
+                ids.push(materials[i].materialId);
+            }
+        }
+    }catch(e){
+        res.status(422).json({message: 'No se pudo completar la accion'})
+    }
+})
+
+function verifyArray(array, id){
+    for(var i = 0; i < array.length; i++){
+        if(array[i] === id){
+            return true;
+        }
+    }
+    return false;
+}
 
 export default router;

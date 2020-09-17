@@ -54,24 +54,6 @@ router.get('/getActivitiesByOuvre', verifyToken, async (req, res) => {
     }
 })
 
-router.post('/getPercentageOuvre', verifyToken, async (req, res) => {
-    try{
-        const tasks = await Task.findAll({where: {
-            ouvreId: req.body.id
-        }})
-        var complete = 0;
-        for(var i = 0; i < tasks.length; i++){
-            if(tasks[i].taskState === 'FINISHED'){
-                complete++;
-            }
-        }
-        var result = (complete * 100) / tasks.length;
-        res.status(200).json({percentage: result});
-    }catch(e){
-        res.status(422).json({"error": e})
-    }
-})
-
 router.get('/getPercentageAllOuvre', verifyToken, async(req, res) => {
     try{
         const tasks = await Task.findAll();

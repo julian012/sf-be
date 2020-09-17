@@ -276,12 +276,32 @@ router.get('/getOuvre', verifyToken, async (req, res) => {
             ouvre.dataValues.userMail = user.userMail
             ouvre.dataValues.userRol = user.userRol
         }
+        var result = await getPercentageByOuvre(ouvre.id);
+        ouvre.dataValues.percentage = result; 
         res.status(200).json({ouvre: ouvre});
     }catch (e){
         console.log(e)
         res.status(422).json({message: 'No se encontro la obra'});
     }
 })
+
+async function getPercentageByOuvre(id){
+    try{
+        const tasks = await Task.findAll({where: {
+            ouvreId: id
+        }})
+        var complete = 0;
+        for(var i = 0; i < tasks.length; i++){
+            if(tasks[i].taskState === 'FINISHED'){
+                complete++;
+            }
+        }
+        var result = (complete * 100) / tasks.length;
+        return result;
+    }catch(e){
+        return e;
+    }
+}
 
 router.post('/assignDirector', verifyToken, async (req, res) => {
     try{
