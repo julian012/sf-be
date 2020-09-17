@@ -1,8 +1,10 @@
 import {Router} from 'express';
+import TypeMachine from '../../models/typemachines'
 import AssignMachine from "../../models/assignmachines";
 import Machine from "../../models/machine";
 import Task from "../../models/task";
 import Ouvre from "../../models/ouvre";
+import User from '../../models/user'
 import {verifyToken, verifyForm} from '../utils/utils';
 
 const router = Router();
@@ -53,6 +55,66 @@ router.delete('/deleteAssignMachine', verifyToken, async (req, res) => {
         }
     }catch(e){
         res.status(422).json({message: 'No se pudo completar la accion'});
+    }
+})
+
+router.get('/getMachineWithAssign', verifyToken, async(req,res) => {
+    try{
+        var assignsInfo = []
+        const machine = await Machine.findOne({
+            where:{
+                id: req.query.id
+            }
+        })
+
+        const provider = await User.findOne({
+            where:{
+                id: machine.dataValues.userId
+            }
+        })
+        machine.dataValues.userName = provider.userName
+
+        const typeMachine = await TypeMachine.findOne({
+            where:{
+                id: machine.dataValues.typeMachineId
+            }
+        })
+        machine.dataValues.typeMachineName = typeMachine.nameTypeMachine
+
+        const assignMachine = await AssignMachine.findAll({
+            where:{
+                machineId: machine.id
+            }
+        })
+        for (let i = 0; i < assignMachine.length; i++) {
+            const element = assignMachine[i];
+
+            const task = await Task.findOne({
+                where:{
+                    id: element.taskId
+                }
+            })
+
+            const ouvre = await Ouvre.findOne({
+                where:{
+                    id: task.ouvreId
+                }
+            })
+
+            assignsInfo.push({
+                id: element.id,
+                ouvreId: ouvre.id,
+                ouvreName: ouvre.ouvreName,
+                taskId: task.id,
+                taskName: task.taskName,
+                createdAt: element.createdAt
+            })
+        }
+        machine.dataValues.assigns = assignsInfo
+        res.status(200).json(machine)
+    }catch(e){
+        console.log(e)
+        res.status(422).json({error: 'No se pudo completar la accion'});
     }
 })
 
