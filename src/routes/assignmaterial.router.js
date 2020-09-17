@@ -100,11 +100,11 @@ router.post('/giveBackMaterial', verifyToken, async (req, res) => {
     }
 })
 
-router.post('/getMaterialWithAssign', verifyToken, async (req, res)=>{
+router.get('/getMaterialWithAssign', verifyToken, async (req, res)=>{
     try{
         var assignsInfo = [];
         const material = await Material.findAll({where: {
-            id: req.body.id
+            id: req.query.id
         }});
         const assignMaterial = await AssignMaterial.findAll({where: {
             materialId: material[0].id
@@ -117,7 +117,8 @@ router.post('/getMaterialWithAssign', verifyToken, async (req, res)=>{
             assignsInfo.push(data);
         }
         material[0].dataValues.Assigns = assignsInfo;
-        res.status(200).json({'material': material})
+        console.log(material)
+        res.status(200).json(material[0])
     }catch(e){
         res.status(422).json({message: 'No se pudo completar la accion'})
     }
