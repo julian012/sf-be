@@ -125,19 +125,31 @@ router.post('/getMaterialWithAssign', verifyToken, async (req, res)=>{
 
 router.post('/getMaterialPercentageByOuvre', verifyToken, async(req, res) => {
     try{
+        var results = [];
         var ids = [];
         const materials = await AssignMaterial.findAll({where: {
             ouvreId: req.body.id
         }});
+        var total = 0;
         for(var i = 0; i < materials.length; i++){
+            total += materials[i].quantityUsed;
             if(!(verifyArray(ids, materials[i].materialId))){
                 ids.push(materials[i].materialId);
             }
         }
+        for(var j = 0; j < materials.length; j ++){
+            var total = 0;
+            for(var i = 0; i < ids.length; i++){
+
+            }
+        }
+        res.status(200).json({result: results});
     }catch(e){
         res.status(422).json({message: 'No se pudo completar la accion'})
     }
 })
+
+
 
 function verifyArray(array, id){
     for(var i = 0; i < array.length; i++){

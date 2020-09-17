@@ -19,7 +19,7 @@ router.get('/', verifyToken, async (req, res) => {
         const ouvres = await Ouvre.findAll();
         for(var i = 0; i < ouvres.length; i++){
             var result = await getPercentageByOuvre(ouvres[i].id);
-            ouvres[i].dataValues.porcentage = result;
+            ouvres[i].dataValues.percentage = result;
         }
         res.status(200).json(ouvres)
     } catch (e) {
