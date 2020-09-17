@@ -2,6 +2,9 @@ import {Router} from 'express';
 import AssignMaterial from "../../models/assignmaterial";
 import {verifyToken, verifyForm} from '../utils/utils';
 import Material from "../../models/material";
+import Ouvre from '../../models/ouvre'
+import User from '../../models/user'
+import TypeMaterial from '../../models/typematerial'
 import { verify } from 'jsonwebtoken';
 
 const router = Router();
@@ -103,23 +106,46 @@ router.post('/giveBackMaterial', verifyToken, async (req, res) => {
 router.get('/getMaterialWithAssign', verifyToken, async (req, res)=>{
     try{
         var assignsInfo = [];
-        const material = await Material.findAll({where: {
+        const material = await Material.findOne({where: {
             id: req.query.id
         }});
+
+        const provider = await User.findOne({
+            where:{
+                id: material.dataValues.userId
+            }
+        })
+
+        material.dataValues.userName = provider.userName
+
+        const typeMaterial = await TypeMaterial.findOne({
+            where:{
+                id: material.dataValues.typeMaterialId
+            }
+        })
+
+        material.dataValues.typeMaterialName = typeMaterial.dataValues.typeMaterialName
+
         const assignMaterial = await AssignMaterial.findAll({where: {
-            materialId: material[0].id
+            materialId: material.id
         }});
         for(var i = 0; i < assignMaterial.length; i++){
             var data = {};
-            data.id = assignMaterial[i].id;
-            data.ouvreId = assignMaterial[i].ouvreId,
+
+            const ouvre = await Ouvre.findOne({
+                where: {id: assignMaterial[i].ouvreId}
+            })
+
+            data.id = assignMaterial[i].id
+            data.ouvreId = ouvre.id
+            data.ouvreName = ouvre.ouvreName
             data.quantityUsed = assignMaterial[i].quantityUsed
             assignsInfo.push(data);
         }
-        material[0].dataValues.Assigns = assignsInfo;
-        console.log(material)
-        res.status(200).json(material[0])
+        material.dataValues.Assigns = assignsInfo;
+        res.status(200).json(material)
     }catch(e){
+        console.log(e)
         res.status(422).json({message: 'No se pudo completar la accion'})
     }
 })
