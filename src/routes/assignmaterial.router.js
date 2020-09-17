@@ -140,6 +140,7 @@ router.get('/getMaterialWithAssign', verifyToken, async (req, res)=>{
             data.ouvreId = ouvre.id
             data.ouvreName = ouvre.ouvreName
             data.quantityUsed = assignMaterial[i].quantityUsed
+            data.createdAt = assignMaterial[i].createdAt
             assignsInfo.push(data);
         }
         material.dataValues.Assigns = assignsInfo;
