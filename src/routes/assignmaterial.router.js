@@ -151,7 +151,7 @@ router.get('/getMaterialWithAssign', verifyToken, async (req, res)=>{
     }
 })
 
-router.post('/getMaterialPercentageByOuvre', verifyToken, async(req, res) => {
+router.get('/getMaterialPercentageByOuvre', verifyToken, async(req, res) => {
     try{
         const ouvres = await Ouvre.findAll({where: {
             statusOuvre: 'DOING'
