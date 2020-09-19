@@ -200,7 +200,7 @@ router.post('/getMaterialPercentageByOuvre', verifyToken, async(req, res) => {
         for(var i = 0; i < mate.length; i++){
             for(var j = 0; j < materials.length; j ++){
                 if(mate[i].id === materials[j].id){
-                    result.push({name: materials[j].materialName, values: mate[i].values})
+                    result.push({name: materials[j].materialName, data: mate[i].values})
                 }
             }
         }
@@ -208,7 +208,7 @@ router.post('/getMaterialPercentageByOuvre', verifyToken, async(req, res) => {
         for(var i = 0; i < ouvres.length; i++){
             ouv.push(ouvres[i].ouvreName);
         }
-        res.status(200).json({axis: {label: 'Obras', values: ouv},series: result});
+        res.status(200).json({axis: {label: 'Obras', categories: ouv},series: result});
     }catch(e){
         console.log(e);
         res.status(422).json({error: e})
