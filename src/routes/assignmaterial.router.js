@@ -153,35 +153,67 @@ router.get('/getMaterialWithAssign', verifyToken, async (req, res)=>{
 
 router.post('/getMaterialPercentageByOuvre', verifyToken, async(req, res) => {
     try{
-        var results = [];
-        var ids = [];
-        const materials = await AssignMaterial.findAll({where: {
-            ouvreId: req.body.id
-        }});
-        var total = 0;
-        for(var i = 0; i < materials.length; i++){
-            total += materials[i].quantityUsed;
-            if(!(verifyArray(ids, materials[i].materialId))){
-                ids.push(materials[i].materialId);
-            }
-        }
-        for(var i = 0; i < ids.length; i++){
-            var totalParcial = 0;
-            for(var j = 0; j < materials.length; j++){
-                if(materials[j].materialId === ids[i]){
-                    totalParcial += materials[j].quantityUsed;
+        const ouvres = await Ouvre.findAll({where: {
+            statusOuvre: 'DOING'
+        }})
+        var idsMaterials = [];
+        for(var i = 0; i < ouvres.length; i++){
+            ouvres[i].dataValues.percentages = [];
+            const assings = await AssignMaterial.findAll({where: {
+                ouvreId: ouvres[i].id
+            }})
+            var total = 0;
+            for(var j = 0; j < assings.length; j ++){
+                total += assings[j].quantityUsed;
+                if(!(verifyArray(idsMaterials, assings[j].materialId))){
+                    idsMaterials.push(assings[j].materialId);
                 }
             }
-            var percentaje = (totalParcial * 100) / total; 
-            results.push({id: ids[i], percentaje: percentaje});
+            for(var k = 0; k < idsMaterials.length; k++){
+                var totalMaterial = 0;
+                for(var j = 0; j < assings.length; j++){
+                    var idActual = idsMaterials[k];
+                    if(idActual = assings[j].id){
+                        totalMaterial += assings[j].quantityUsed;
+                    }
+                }
+                var percentage = (totalMaterial * 100) / total;
+                ouvres[i].dataValues.percentages.push({idMaterial: idsMaterials[k], percentage: percentage});
+            }
         }
-        res.status(200).json({result: results});
+        var mate = [];
+        for(var i = 0; i < idsMaterials.length; i++){
+            for(var j = 0; j < ouvres.length; j++){
+                var values = [];
+                var percentages = ouvres[j].dataValues.percentages;
+                for(var k = 0; k < percentages.length; k++){
+                    values.push(0);
+                    if(idsMaterials[i] === percentages[k].idMaterial){
+                        values[i] = percentages[k].percentage;
+                    }
+                }
+            }
+            mate.push({id: idsMaterials[i], values: values})
+        }
+        const materials = await Material.findAll({});
+        var result = [];
+        for(var i = 0; i < mate.length; i++){
+            for(var j = 0; j < materials.length; j ++){
+                if(mate[i].id === materials[j].id){
+                    result.push({name: materials[j].materialName, values: mate[i].values})
+                }
+            }
+        }
+        var ouv = [];
+        for(var i = 0; i < ouvres.length; i++){
+            ouv.push(ouvres[i].ouvreName);
+        }
+        res.status(200).json({axis: {label: 'Obras', values: ouv},series: result});
     }catch(e){
-        res.status(422).json({message: 'No se pudo completar la accion'})
+        console.log(e);
+        res.status(422).json({error: e})
     }
 })
-
-
 
 function verifyArray(array, id){
     for(var i = 0; i < array.length; i++){
