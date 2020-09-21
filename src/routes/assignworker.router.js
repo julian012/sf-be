@@ -120,4 +120,16 @@ router.post('/transferWorker', verifyToken, async (req, res) => {
     }
 })
 
+router.get('/getTimeWorkedByWorker', verifyToken, async (req, res) => {
+    const day = new Date().getDay();
+    try{
+       const assigns = await AssignWorker.findAll({});
+       for(var i = 0; i < assigns.length; i++){
+        res.status(200).json({day: day});
+       } 
+    }catch(e){
+        res.status(422).json({error: e});
+    }
+})
+
 export default router;

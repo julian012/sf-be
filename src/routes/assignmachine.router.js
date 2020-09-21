@@ -6,6 +6,7 @@ import Task from "../../models/task";
 import Ouvre from "../../models/ouvre";
 import User from '../../models/user'
 import {verifyToken, verifyForm} from '../utils/utils';
+import { verify } from 'jsonwebtoken';
 
 const router = Router();
 
@@ -149,5 +150,53 @@ router.post('/getTaskByMachine', verifyToken, async (req, res) => {
         res.status(422).json({error: 'No se pudo completar la accion'});
     }
 })
+
+router.get('/getTimeWorkedByMachine', verifyToken, async (req, res) => {
+    const resultParcial = [];
+    const ids = [];
+    var totalHours = 0;
+    var resultFinal = [];
+    try{
+        const assigns = await AssignMachine.findAll({});
+        for(var i = 0; i < assigns.length; i++){
+            totalHours += assigns[i].workerdHours;
+            if(!(verifyId(ids, assigns[i].machineId))){
+                ids.push(assigns[i].machineId);
+            }
+        }
+        for(var i = 0; i < ids.length; i++){
+            var totalHoursWorked = 0;
+            for(var j = 0; j < assigns.length; j++){
+                if(ids[i] === assigns[j].machineId){
+                    totalHoursWorked += assigns[j].workerdHours;
+                }
+            }
+            resultParcial.push({id: ids[i], hours: totalHoursWorked});
+        }
+        const machines = await Machine.findAll({});
+        for(var j = 0; j < resultParcial.length; j++){
+            for(var i = 0; i < machines.length; i++){
+                if(resultParcial[j].id == machines[i].id){
+                    var percentage = (resultParcial[j].hours * 100) / totalHours;
+                    resultFinal.push({machinePlate: machines[i].machinePlate, percentage: percentage});
+                }
+            }
+        }
+        res.status(200).json({result: resultFinal, totalHours: totalHours});
+    }catch(e){
+        console.log(e);
+        res.status(422).json({error: e});
+    }
+})
+
+function verifyId(array, id){
+    for(var p = 0; p < array.length; p++){
+        if (array[p].dataValues.id === id){
+                
+            return true;
+        }
+    }
+    return false;
+}
 
 export default router
