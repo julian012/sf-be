@@ -173,16 +173,20 @@ router.get('/getTimeWorkedByMachine', verifyToken, async (req, res) => {
             }
             resultParcial.push({id: ids[i], hours: totalHoursWorked});
         }
+        var series = [];
+        var labels = [];
+        for(var i = 0; i < resultParcial.length; i++){
+            series.push(resultParcial[i].hours);
+        }
         const machines = await Machine.findAll({});
-        for(var j = 0; j < resultParcial.length; j++){
-            for(var i = 0; i < machines.length; i++){
-                if(resultParcial[j].id == machines[i].id){
-                    var percentage = (resultParcial[j].hours * 100) / totalHours;
-                    resultFinal.push({machinePlate: machines[i].machinePlate, percentage: percentage});
+        for(var i = 0; i < resultParcial.length; i++){
+            for(var j = 0; j < machines.length; j++){
+                if(machines[j].id === resultParcial[i].id){
+                    labels.push(machines[j].machinePlate);
                 }
             }
         }
-        res.status(200).json({result: resultFinal, totalHours: totalHours});
+        res.status(200).json({label: labels, series: series});
     }catch(e){
         console.log(e);
         res.status(422).json({error: e});
