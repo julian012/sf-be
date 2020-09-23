@@ -1,15 +1,17 @@
 import {Router} from 'express';
 import AssignWorker from "../../models/assignworker";
 import {verifyToken} from '../utils/utils';
+import User from "../../models/user";
 
 const router = Router();
 
 router.get('/', verifyToken, async (req, res) => {
     try {
         const assignworker = await AssignWorker.findAll();
-        res.status(200).json({assignworkers: assignworkers})
+        res.status(200).json({assignworkers: assignworker})
     } catch (e) {
-        res.status(422).json({
+        console.log(e);
+                res.status(422).json({
             message: 'error'
         })
     }
@@ -121,15 +123,79 @@ router.post('/transferWorker', verifyToken, async (req, res) => {
 })
 
 router.get('/getTimeWorkedByWorker', verifyToken, async (req, res) => {
-    const day = new Date().getDay();
     try{
        const assigns = await AssignWorker.findAll({});
+       var ids = [];
        for(var i = 0; i < assigns.length; i++){
-        res.status(200).json({day: day});
-       } 
+            if(!(verifyId(ids, assigns[i].userId))){
+                ids.push(assigns[i].userId);
+            }
+       }
+       var result = [];
+       for (var j = 0; j < ids.length; j++){
+            var total = 0;
+            for(var i = 0; i < assigns.length; i++){
+                if(ids[j] === assigns[i].userId){
+                    if(assigns[i].assignEndDate === null){
+                        const date = new Date();
+                        const dateFirst = new Date(assigns[i].assignStartDate);
+                        var daysNoCount = getBusinessDays(dateFirst, date); 
+                        var daysDiff = date.getTime() - dateFirst.getTime();
+                        var daysTotal = Math.round(daysDiff/(1000*60*60*24));
+                        total += (daysTotal - daysNoCount) * 8;
+                    }else{
+                        const dateEnd = new Date(assigns[i].assignEndDate);
+                        const dateFirst = new Date(assigns[i].assignStartDate);
+                        var daysNoCount = getBusinessDays(dateFirst, dateEnd)
+                        var daysDiff = dateEnd.getTime() - dateFirst.getTime();
+	                    var daysTotal = Math.round(daysDiff/(1000*60*60*24));
+                        total += (daysTotal - daysNoCount) * 8;
+                    }
+                }
+            }
+            result.push({id: ids[j], total: total})
+       }
+       var  finalNames = [];
+       var series = [];
+       const workers = await User.findAll({});
+       for(var j = 0; j < workers.length; j++){
+            for(var i = 0; i < result.length; i ++){
+                if(result[i].id === workers[j].id){
+                    finalNames.push(workers[j].userName)
+                }
+            }
+       }
+       for(var i = 0; i < result.length; i++){
+           series.push(result[i].total);
+       }
+       res.status(200).json({labels: finalNames, series: series});
     }catch(e){
+        console.log(e);
         res.status(422).json({error: e});
     }
 })
+
+function getBusinessDays(dateInit, dateFinal){
+    var days = 0;
+    var dateI = new Date(dateInit);
+    var dateF = new Date(dateFinal); 
+    while(dateI <= dateF){
+        if(dateI.getDay() == 0 || dateI.getDay() == 6){
+            days++;
+        }
+        dateI.setDate(dateI.getDate() + 1);
+    }
+    return days;
+}
+
+function verifyId(array, id){
+    for(var p = 0; p < array.length; p++){
+        if (array[p] === id){
+                
+            return true;
+        }
+    }
+    return false;
+}
 
 export default router;
