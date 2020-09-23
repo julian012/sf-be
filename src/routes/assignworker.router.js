@@ -1,6 +1,7 @@
 import {Router} from 'express';
 import AssignWorker from "../../models/assignworker";
-import {verifyToken} from '../utils/utils';
+import Schedule from '../../models/schedule'
+import {verifyToken, Op} from '../utils/utils';
 import User from "../../models/user";
 
 const router = Router();
@@ -17,11 +18,26 @@ router.get('/', verifyToken, async (req, res) => {
     }
 })
 
-router.get('/getTimeWorkedByWorkerC', verifyToken, async (req, res) => {
+router.get('/getTimeWorkerByWorkersByOuvreId', verifyToken, async (req, res) => {
+    try{
+        
+    }catch(e){
+
+    }
+})
+
+router.get('/getTimeWorkedByWorkerId', verifyToken, async (req, res) => {
     try{
         const workerId = req.query.userId
         const startDate = new Date(req.query.initDate)
         const endDate = new Date(req.query.endDate)
+
+        var user = await User.findOne({
+            raw: true,
+            where:{
+                id: workerId
+            }
+        })
 
         var schedules = await Schedule.findAll({
             raw: true,
@@ -34,11 +50,10 @@ router.get('/getTimeWorkedByWorkerC', verifyToken, async (req, res) => {
         })
 
         schedules.sort(function(a,b){
-            // Turn your strings into dates, and then subtract them
-            // to get a value that is either negative, positive, or zero.
             return a.scheduleDate.getTime() - b.scheduleDate.getTime()
         });
 
+        var totalWorkerHours = 0
         var totalWorkDays = []
         var dayInWeek = []
         for (let j = 0; j < schedules.length; j++) {
@@ -47,7 +62,6 @@ router.get('/getTimeWorkedByWorkerC', verifyToken, async (req, res) => {
             if (dayInWeek.length > 3) {
                 var day = {}
                 day.date = dayInWeek[0].scheduleDate.toISOString().split("T")[0]
-                console.log(day)
                 var morningDate = dayInWeek[0].scheduleDate
                 var halfDayDate = dayInWeek[1].scheduleDate
                 var afternoonDate = dayInWeek[2].scheduleDate
@@ -55,14 +69,21 @@ router.get('/getTimeWorkedByWorkerC', verifyToken, async (req, res) => {
 
                 var difInTimeMorning = halfDayDate.getTime() - morningDate.getTime()
                 var difInTimeAfternoon = nightDate.getTime() - afternoonDate.getTime()
-                console.log(difInTimeMorning / (1000 * 3600))
-                console.log(difInTimeAfternoon / (1000 * 3600))
+                var dayInHours = (difInTimeMorning / (1000 * 3600)) + (difInTimeAfternoon / (1000 * 3600))
+                day.workedHours = dayInHours
+                totalWorkerHours += dayInHours
 
-                //TODO Terminar de crear el objeto, redondear los valores de horas, enviar la respuesta y subir cambios
-
+                totalWorkDays.push(day)
+                
                 dayInWeek.length = 0
             }
         }
+
+        delete user['userPassword']
+        delete user['updatedAt']
+        user.totalWorkerHours = totalWorkerHours
+        user.work = totalWorkDays
+        console.log(user)
 
         res.status(422).json({
             message: 'error'
