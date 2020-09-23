@@ -1,6 +1,7 @@
 import {Router} from 'express';
 import AssignWorker from "../../models/assignworker";
-import {verifyToken} from '../utils/utils';
+import Schedule from "../../models/schedule"
+import {verifyToken, Op} from '../utils/utils';
 
 const router = Router();
 
@@ -9,6 +10,64 @@ router.get('/', verifyToken, async (req, res) => {
         const assignworker = await AssignWorker.findAll();
         res.status(200).json({assignworkers: assignworkers})
     } catch (e) {
+        res.status(422).json({
+            message: 'error'
+        })
+    }
+})
+
+router.get('/getTimeWorkedByWorkerC', verifyToken, async (req, res) => {
+    try{
+        const workerId = req.query.userId
+        const startDate = new Date(req.query.initDate)
+        const endDate = new Date(req.query.endDate)
+
+        var schedules = await Schedule.findAll({
+            raw: true,
+            where: {
+                userId: workerId,
+                scheduleDate: {
+                    [Op.between]: [startDate, endDate]
+                }
+            }
+        })
+
+        schedules.sort(function(a,b){
+            // Turn your strings into dates, and then subtract them
+            // to get a value that is either negative, positive, or zero.
+            return a.scheduleDate.getTime() - b.scheduleDate.getTime()
+        });
+
+        var totalWorkDays = []
+        var dayInWeek = []
+        for (let j = 0; j < schedules.length; j++) {
+            const schedule = schedules[j];
+            dayInWeek.push(schedule)
+            if (dayInWeek.length > 3) {
+                var day = {}
+                day.date = dayInWeek[0].scheduleDate.toISOString().split("T")[0]
+                console.log(day)
+                var morningDate = dayInWeek[0].scheduleDate
+                var halfDayDate = dayInWeek[1].scheduleDate
+                var afternoonDate = dayInWeek[2].scheduleDate
+                var nightDate = dayInWeek[3].scheduleDate
+
+                var difInTimeMorning = halfDayDate.getTime() - morningDate.getTime()
+                var difInTimeAfternoon = nightDate.getTime() - afternoonDate.getTime()
+                console.log(difInTimeMorning / (1000 * 3600))
+                console.log(difInTimeAfternoon / (1000 * 3600))
+
+                //TODO Terminar de crear el objeto, redondear los valores de horas, enviar la respuesta y subir cambios
+
+                dayInWeek.length = 0
+            }
+        }
+
+        res.status(422).json({
+            message: 'error'
+        })
+    }catch(e){
+        console.log(e)
         res.status(422).json({
             message: 'error'
         })
