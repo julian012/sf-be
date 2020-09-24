@@ -15,6 +15,30 @@ router.get('/', verifyToken, async (req, res) => {
     }
 })
 
+router.get('/getLatestFinishTask', verifyToken, async (req, res) => {
+    try{
+        var tasks = await Task.findAll({
+            raw: true,
+            where:{
+                taskState: 'FINISHED'
+            }
+        })
+        tasks = tasks.reverse()
+        var latestTask = []
+        if (tasks.length > 9) {
+            latestTask = tasks.slice(Math.max(tasks.length - 5, 0))
+        }else{
+            latestTask = tasks
+        }
+        console.log(latestTask)
+
+    }catch(e){
+        res.status(422).json({
+            message: 'error'
+        })
+    }
+})
+
 router.post('/addTask', verifyToken, async (req, res) => {
     try {
         var errors = await verifyForm(req.body, 'task');
