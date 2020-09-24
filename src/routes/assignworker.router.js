@@ -4,8 +4,65 @@ import Schedule from '../../models/schedule'
 import Task from '../../models/task'
 import {verifyToken, Op} from '../utils/utils';
 import User from "../../models/user";
+import Ouvre from '../../models/ouvre';
 
 const router = Router();
+
+router.get('/getWorkersOuvres', verifyToken, async (req, res) => {
+    try{
+        const id = req.query.id
+        const assigns = await AssignWorker.findAll({
+            raw: true,
+            where:{
+                userId: id
+            }
+        })
+        var tasks = []
+        for (let i = 0; i < assigns.length; i++) {
+            const element = assigns[i];
+            const tmpTask = await Task.findAll({
+                raw: true,
+                where: {
+                    id: element.taskId
+                }
+            })
+            for (let t = 0; t < tmpTask.length; t++) {
+                const element = tmpTask[t];
+                tasks.push(element)
+            }
+        }
+        var ouvres = []
+        for (let t = 0; t < tasks.length; t++) {
+            const element = tasks[t];
+            const ouvre = await Ouvre.findOne({
+                raw: true,
+                where:{
+                    id: element.ouvreId                }
+            })
+            ouvres.push(ouvre)
+        }
+        res.status(200).json(removeDuplicates(ouvres, 'id'))
+    }catch(e){
+        console.log(e)
+        res.status(422).json({
+            message: 'error'
+        })
+    }
+})
+
+function removeDuplicates(originalArray, prop) {
+    var newArray = [];
+    var lookupObject  = {};
+
+    for(var i in originalArray) {
+       lookupObject[originalArray[i][prop]] = originalArray[i];
+    }
+
+    for(i in lookupObject) {
+        newArray.push(lookupObject[i]);
+    }
+     return newArray;
+}
 
 router.get('/', verifyToken, async (req, res) => {
     try {
