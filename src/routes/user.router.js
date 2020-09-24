@@ -128,7 +128,9 @@ router.post('/login', async (req, res) => {
             res.status(200).json(
                 { 
                     userId: user.id,
-                    token: await generateToken(user.id, user.userMail)
+                    token: await generateToken(user.id, user.userMail),
+                    userName: user.userName,
+                    userMail: user.userMail
                 }) 
         }else{
             throw new Error();
@@ -203,5 +205,6 @@ router.get('/getProviderList', verifyToken, async(req, res) => {
         res.status(422).json({message: 'No se pudo completar la accion'})
     }
 })
+
 
 export default router
