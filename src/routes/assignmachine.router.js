@@ -195,7 +195,7 @@ router.get('/getTimeWorkedByMachine', verifyToken, async (req, res) => {
 
 function verifyId(array, id){
     for(var p = 0; p < array.length; p++){
-        if (array[p].dataValues.id === id){
+        if (array[p] === id){
             return true;
         }
     }
