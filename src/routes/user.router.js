@@ -26,20 +26,17 @@ router.post('/updateUser', verifyToken, async(req, res) => {
             userPhone: newUser.userPhone,
             userMail: newUser.userMail
         }, {where: {
-            id: newUser.userId
+            id: newUser.id
         }})
 
         if(user[0] === 1){
             res.status(200).json({"success": "Modificación realizada"})
         }else{
-            res.status(422).json({
-                message: 'error'
-            })
+            throw new Error();
         }
     }catch(e){
-        res.status(422).json({
-            message: 'error'
-        })
+        console.log(e);
+        res.status(422).json({message: e});
     }
 })
 
