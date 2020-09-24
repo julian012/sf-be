@@ -30,7 +30,7 @@ router.get('/getLatestFinishTask', verifyToken, async (req, res) => {
         }else{
             latestTask = tasks
         }
-        console.log(latestTask)
+        res.status(200).json(tasks)
 
     }catch(e){
         res.status(422).json({
