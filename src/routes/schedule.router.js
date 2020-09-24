@@ -24,7 +24,19 @@ router.get('/getUserSchedule', verifyToken, async(req, res) => {
                 userId: req.query.userId
             }
         })
-        res.status(200).json(schedules)
+        var resp = []
+        for (let s = 0; s < schedules.length; s++) {
+            const element = schedules[s].dataValues;
+            const ouvre = await Ouvre.findOne({
+                raw: true,
+                where: {
+                    id: element.ouvreId
+                }
+            })            
+            element.ouvreName = ouvre.ouvreName
+            resp.push(element)
+        }
+        res.status(200).json(resp)
     }catch(e){
         console.log(e)
         res.status(422).json({
