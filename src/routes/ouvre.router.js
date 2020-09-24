@@ -1,5 +1,6 @@
 import {Router} from 'express';
 import Ouvre from "../../models/ouvre";
+import Schedule from "../../models/schedule"
 import Task from "../../models/task";
 import AssignWorker from "../../models/assignworker";
 import AssignMaterial from "../../models/assignmaterial";
@@ -353,32 +354,31 @@ router.get('/getFreeDirectors', verifyToken, async (req, res) => {
     }
 })
 
-router.get('/getTimeWorkerByWorkersByOuvreId', verifyToken, async (req, res) => {
+router.get('/getTimeWorkerPerHours', verifyToken, async (req, res) => {
     try{
-        const ouvreId = req.query.ouvreId
-        const startDate = new Date(req.query.initDate)
-        const endDate = new Date(req.query.endDate)
-        const ouvres = await Ouvre.findAll()
-        for (let o = 0; ouvre < ouvres.length; ouvre++) {
-            const ouvre = ouvres[o];
-
-            var response = []
+        const response = []
+        const ouvres = await Ouvre.findAll({
+        })
+        for (let o = 0; o < ouvres.length; o++) {
+            var ouvre = ouvres[o];
+            var hours = 0
             const tasks = await Task.findAll({
                 raw: true,
                 where: {
-                    ouvreId: ouvreId
+                    ouvreId: ouvre.id
                 }
             })
             var userIds = []
             const allAssigns = []
             for (let t = 0; t < tasks.length; t++) {
                 const element = tasks[t];
+                console.log(element)
                 const assigns = await AssignWorker.findAll({
                     raw: true,
-                    where:{
+                    where: {
                         taskId: element.id
                     }
-                })           
+                })
                 for (let a = 0; a < assigns.length; a++) {
                     const as = assigns[a];
                     allAssigns.push(as)
@@ -388,36 +388,30 @@ router.get('/getTimeWorkerByWorkersByOuvreId', verifyToken, async (req, res) => 
                 const element = allAssigns[a];
                 userIds.push(element.userId)
             }
-            
+
             for (let u = 0; u < userIds.length; u++) {
                 const id = userIds[u];
                 var user = await User.findOne({
                     raw: true,
-                    where:{
+                    where: {
                         id: id
                     }
                 })
                 var schedules = await Schedule.findAll({
                     raw: true,
                     where: {
-                        userId: id,
-                        scheduleDate: {
-                            [Op.between]: [startDate, endDate]
-                        }
+                        userId: id
                     }
                 })
-                schedules.sort(function(a,b){
+                schedules.sort(function (a, b) {
                     return a.scheduleDate.getTime() - b.scheduleDate.getTime()
                 });
                 var totalWorkerHours = 0
-                var totalWorkDays = []
                 var dayInWeek = []
                 for (let j = 0; j < schedules.length; j++) {
                     const schedule = schedules[j];
                     dayInWeek.push(schedule)
                     if (dayInWeek.length > 3) {
-                        var day = {}
-                        day.date = dayInWeek[0].scheduleDate.toISOString().split("T")[0]
                         var morningDate = dayInWeek[0].scheduleDate
                         var halfDayDate = dayInWeek[1].scheduleDate
                         var afternoonDate = dayInWeek[2].scheduleDate
@@ -426,23 +420,15 @@ router.get('/getTimeWorkerByWorkersByOuvreId', verifyToken, async (req, res) => 
                         var difInTimeMorning = halfDayDate.getTime() - morningDate.getTime()
                         var difInTimeAfternoon = nightDate.getTime() - afternoonDate.getTime()
                         var dayInHours = (difInTimeMorning / (1000 * 3600)) + (difInTimeAfternoon / (1000 * 3600))
-                        day.workedHours = dayInHours
                         totalWorkerHours += dayInHours
-
-                        totalWorkDays.push(day)
-                        
-                        dayInWeek.length = 0
                     }
                 }
-                delete user['userPassword']
-                delete user['updatedAt']
-                user.totalWorkerHours = totalWorkerHours
-                user.work = totalWorkDays
-                response.push(user)
+                console.log(totalWorkerHours)
+                hours += totalWorkerHours
             }
-            
+            ouvre.dataValues.totalWorkerHours = totalWorkerHours
+            response.push(ouvre)
         }
-        
         res.status(200).json(response)
 
     }catch(e){
