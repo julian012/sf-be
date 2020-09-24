@@ -62,7 +62,8 @@ router.post('/addSchedule', verifyToken, async(req, res) => {
             
             for (let i = 0; i < userSchedule.length; i++) {
                 const element = userSchedule[i].dataValues;
-                if(element.scheduleDate.toISOString().split('T')[0] === getActualDate()){
+                var date = new Date()
+                if(element.scheduleDate.toISOString().split('T')[0] === date.toISOString().split('T')[0]){
                     j++
                 }                
             }

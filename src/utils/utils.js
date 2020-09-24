@@ -100,6 +100,7 @@ export async function sendEmail(mail, id,res){
 
 export function getActualDate(){
     var currentdate = new Date(); 
+    console.log(currentdate)
     var datetime = currentdate.getFullYear() + "-"
                 + getMonth((currentdate.getMonth()+1))  + "-" 
                 + getMonth(currentdate.getDate())
