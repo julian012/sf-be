@@ -26,20 +26,17 @@ router.post('/updateUser', verifyToken, async(req, res) => {
             userPhone: newUser.userPhone,
             userMail: newUser.userMail
         }, {where: {
-            id: newUser.userId
+            id: newUser.id
         }})
 
         if(user[0] === 1){
             res.status(200).json({"success": "Modificación realizada"})
         }else{
-            res.status(422).json({
-                message: 'error'
-            })
+            throw new Error();
         }
     }catch(e){
-        res.status(422).json({
-            message: 'error'
-        })
+        console.log(e);
+        res.status(422).json({message: e});
     }
 })
 
@@ -131,7 +128,9 @@ router.post('/login', async (req, res) => {
             res.status(200).json(
                 { 
                     userId: user.id,
-                    token: await generateToken(user.id, user.userMail)
+                    token: await generateToken(user.id, user.userMail),
+                    userName: user.userName,
+                    userMail: user.userMail
                 }) 
         }else{
             throw new Error();
@@ -206,5 +205,6 @@ router.get('/getProviderList', verifyToken, async(req, res) => {
         res.status(422).json({message: 'No se pudo completar la accion'})
     }
 })
+
 
 export default router
